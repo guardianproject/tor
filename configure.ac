@@ -106,6 +106,20 @@ fi
 AC_SUBST(DOXYGEN_FATAL_WARNINGS)
 AC_SUBST(DOXYGEN_WARN_ON_MISSING)
 
+dnl Enable minimal, standard Android build
+AC_ARG_ENABLE(android,
+     AS_HELP_STRING(--enable-android, [setup build for Android exeutable/shared library]))
+
+if test "x$enable_android" = "xyes"; then
+  asciidoc=false
+  enable_html_manual=no
+  enable_manpage=no
+  enable_pic=yes
+  enable_system_torrc=no
+  enable_tool_name_check=no
+  have_systemd=no
+fi
+
 if test "x$enable_coverage" != "xyes" -a "x$enable_asserts_in_tests" = "xno" ; then
     AC_MSG_ERROR([Can't disable assertions outside of coverage build])
 fi
@@ -157,7 +171,7 @@ AC_ARG_ENABLE(asciidoc,
         "yes") asciidoc=true ;;
         "no")  asciidoc=false ;;
         *) AC_MSG_ERROR(bad value for --disable-asciidoc) ;;
-      esac], [asciidoc=true])
+      esac], [test "x$asciidoc" = "xtrue" && asciidoc=true])
 
 # systemd notify support
 AC_ARG_ENABLE(systemd,
