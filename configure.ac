@@ -149,6 +149,8 @@ if test "x$enable_android" = "xyes"; then
  can be derived from the NDK ABIs: https://developer.android.com/ndk/guides/abis
        ])
   fi
+=======
+>>>>>>> c5abb7a184 (move Android build setup into --enable-android flag)
 fi
 
 if test "x$enable_coverage" != "xyes" -a "x$enable_asserts_in_tests" = "xno" ; then
