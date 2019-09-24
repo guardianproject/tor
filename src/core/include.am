@@ -157,6 +157,10 @@ LIBTOR_APP_A_SOURCES = 				\
 	src/feature/stats/rephist.c		\
 	src/feature/stats/predict_ports.c
 
+if USE_JNI
+LIBTOR_APP_A_SOURCES += src/feature/api/org_torproject_jni_TorService.c
+endif
+
 if BUILD_NT_SERVICES
 LIBTOR_APP_A_SOURCES += src/app/main/ntmain.c
 endif
@@ -434,6 +438,10 @@ noinst_HEADERS +=					\
 	src/feature/stats/geoip_stats.h			\
 	src/feature/stats/rephist.h			\
 	src/feature/stats/predict_ports.h
+
+if USE_JNI
+noinst_HEADERS += src/feature/api/org_torproject_jni_TorService.h
+endif
 
 noinst_HEADERS +=				\
 	src/app/config/auth_dirs.inc		\
