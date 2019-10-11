@@ -62,4 +62,12 @@ JNIEXPORT jint JNICALL
 Java_org_torproject_jni_TorService_runMain
 (JNIEnv *, jobject);
 
+/*
+ * Class:     org_torproject_jni_TorService
+ * Method:    prepareFileDescriptor
+ */
+JNIEXPORT jobject JNICALL
+Java_org_torproject_jni_TorService_prepareFileDescriptor
+(JNIEnv *env, jclass, jstring);
+
 #endif /* !defined(ORG_TORPROJECT_JNI_TORSERVICE_H) */
