@@ -118,6 +118,24 @@ if test "x$enable_android" = "xyes"; then
   enable_system_torrc=no
   enable_tool_name_check=no
   have_systemd=no
+
+  need_cross_compiling_host=no
+  if test "x$cross_compiling" != "xyes"; then
+       need_cross_compiling_host=yes
+  fi
+  case "$host" in
+       *-linux-android*) ;;
+       *)
+       need_cross_compiling_host=yes
+       ;;
+  esac
+  if test "x$need_cross_compiling_host" = "xyes"; then
+       AC_MSG_ERROR([
+
+ Android builds are cross-compiled, therefore require setting --host= which
+ can be derived from the NDK ABIs: https://developer.android.com/ndk/guides/abis
+       ])
+  fi
 fi
 
 if test "x$enable_coverage" != "xyes" -a "x$enable_asserts_in_tests" = "xno" ; then
