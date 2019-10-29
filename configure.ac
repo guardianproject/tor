@@ -30,6 +30,16 @@ AC_CANONICAL_HOST
 
 PKG_PROG_PKG_CONFIG
 
+if test "x$PKG_CONFIG_PATH" = "x" && test "x$prefix" != "xNONE" && test "$host" != "$build"; then
+   export PKG_CONFIG_PATH=$prefix/lib/pkgconfig
+   AC_MSG_NOTICE([set PKG_CONFIG_PATH=$PKG_CONFIG_PATH to support cross-compiling])
+   if test -f "$PKG_CONFIG_PATH/libevent.pc"; then
+       echo "checking for $PKG_CONFIG_PATH/libevent.pc... yes"
+   else
+       AC_MSG_ERROR([$PKG_CONFIG_PATH/libevent.pc not found!])
+   fi
+fi
+
 AC_ARG_ENABLE(openbsd-malloc,
    AS_HELP_STRING(--enable-openbsd-malloc, [use malloc code from OpenBSD.  Linux only. Deprecated: see --with-malloc]))
 AC_ARG_ENABLE(static-openssl,
