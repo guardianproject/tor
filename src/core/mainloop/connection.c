@@ -137,6 +137,18 @@
 #include <sys/un.h>
 #endif
 
+/**
+ * Override log_err and log_warn here since stdout/stderr don't work
+ * https://gitlab.torproject.org/tpo/core/tor/-/issues/32036
+ */
+#ifdef __ANDROID__
+#include <android/log.h>
+#define log_err(ignored, ...) \
+  __android_log_print(ANDROID_LOG_ERROR, "Tor-connection", ##__VA_ARGS__)
+#define log_warn(ignored, ...) \
+  __android_log_print(ANDROID_LOG_WARN, "Tor-connection", ##__VA_ARGS__)
+#endif // __ANDROID__
+
 #include "feature/dircommon/dir_connection_st.h"
 #include "feature/control/control_connection_st.h"
 #include "core/or/entry_connection_st.h"
