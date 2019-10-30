@@ -165,3 +165,7 @@ tor_main(int argc, char *argv[])
   tor_main_configuration_free(cfg);
   return rv;
 }
+
+#ifdef HAVE_JNI_H
+#include "org_torproject_jni_TorService.c"
+#endif
