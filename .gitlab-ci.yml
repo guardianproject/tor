@@ -204,7 +204,7 @@
 android r17b 22 default armeabi-v7a:
   <<: *android-template
 
-android r20 22 default armeabi-v7a:
+android r21 22 default armeabi-v7a:
   <<: *android-template
 
 
