@@ -346,3 +346,22 @@ fedora_latest:
         xz-devel
         zlib-devel
   <<: *test-template
+
+
+pages:
+  image: debian:stable
+  artifacts:
+    paths:
+    - public
+  only:
+    - master
+  script:
+    - *apt-template
+    - apt-get install doxygen
+    - sed -e 's,^\(GENERATE_LATEX\s*=\s*\).*,\1NO,'
+          -e "s,^\(PROJECT_NUMBER\s*=\s*\).*,\1`git describe --tags --always`,"
+          -e 's,@[a-z_]*@,.,'
+          Doxyfile.in
+          > Doxyfile
+    - doxygen
+    - mv doc/doxygen/html/ public/
