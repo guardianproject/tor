@@ -237,3 +237,13 @@ debian-packaging-0.4.6:
   rules:
     - if: $CI_PROJECT_NAMESPACE == "tpo/core" &&
           $CI_COMMIT_BRANCH == "maint-0.4.6"
+
+# cppcheck static analyzer
+cppcheck:
+  image: debian:bullseye
+  script:
+    - *apt-template
+    - apt-get install cppcheck
+    - find src -name '*.[ch]' | sort
+        | cppcheck --file-list=- --max-configs=50
+            --enable=information,performance,portability,unusedFunction
