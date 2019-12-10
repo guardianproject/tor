@@ -227,3 +227,14 @@ debian-nss:
     NSS: "yes"
   script:
     - ./scripts/ci/ci-driver.sh
+
+#####
+# cppcheck static analyzer
+cppcheck:
+  image: debian:bullseye
+  script:
+    - *apt-template
+    - apt-get install cppcheck
+    - find src -name '*.[ch]' | sort
+        | cppcheck --file-list=- --max-configs=50
+            --enable=information,performance,portability,unusedFunction
