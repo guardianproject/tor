@@ -289,3 +289,13 @@ rust-latest:
     - cargo clippy --all-features --all-targets -- -D warnings
   after_script:
     - cargo clean
+
+# cppcheck static analyzer
+cppcheck:
+  image: debian:bullseye
+  script:
+    - *apt-template
+    - apt-get install cppcheck
+    - find src -name '*.[ch]' | sort
+        | cppcheck --file-list=- --max-configs=50
+            --enable=information,performance,portability,unusedFunction
