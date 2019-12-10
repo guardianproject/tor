@@ -258,6 +258,16 @@ Java_org_torproject_jni_TorService_runMain
 {
   return RunMain(env, thisObj);
 }
+
+JNIEXPORT void JNICALL
+Java_org_torproject_jni_TorService_torFreeAll
+(JNIEnv *env, jobject _ignore)
+{
+  UNUSED(env);
+  UNUSED(_ignore);
+  tor_free_all(0);
+}
+
 /**
  * Android does not support UNIX Domain Sockets, but we can fake it by sending
  * the file descriptor via a java.io.FileDescriptor instance, which can be
