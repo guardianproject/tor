@@ -64,6 +64,15 @@ Java_org_torproject_jni_TorService_runMain
 
 /*
  * Class:     org_torproject_jni_TorService
+ * Method:    torFreeAll
+ * Signature: ()V
+ */
+JNIEXPORT jint JNICALL
+Java_org_torproject_jni_TorService_torFreeAll
+(JNIEnv *, jobject);
+
+/*
+ * Class:     org_torproject_jni_TorService
  * Method:    prepareFileDescriptor
  */
 JNIEXPORT jobject JNICALL
