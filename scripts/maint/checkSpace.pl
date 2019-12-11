@@ -237,7 +237,7 @@ for my $fn (@ARGV) {
                     msg "$&:$fn:$.\n";
                 }
                 if (/\bmalloc\(/ or /\bfree\(/ or /\brealloc\(/ or
-                    /\bstrdup\(/ or /\bstrndup\(/ or /\bcalloc\(/) {
+                    /\bstrndup\(/ or /\bcalloc\(/) {
                     msg "$&:$fn:$.    (use tor_malloc, tor_free, etc)\n";
                 }
             }
