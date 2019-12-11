@@ -22,7 +22,6 @@
    malloc(:./dubious.c:77    (use tor_malloc, tor_free, etc)
      free(:./dubious.c:78    (use tor_malloc, tor_free, etc)
   realloc(:./dubious.c:79    (use tor_malloc, tor_free, etc)
-   strdup(:./dubious.c:80    (use tor_malloc, tor_free, etc)
   strndup(:./dubious.c:81    (use tor_malloc, tor_free, etc)
    calloc(:./dubious.c:82    (use tor_malloc, tor_free, etc)
    noguard:./dubious.h (No #ifndef/#define header guard pair found)
