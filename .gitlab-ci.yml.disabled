@@ -391,5 +391,3 @@ no-accel 22 default x86_64 r21e 1.1.1l:
 
 no-accel 24 default armeabi-v7a r21e 1.1.1l:
   <<: *android-template
-=======
->>>>>>> 024cc34e35 (gitlab-ci: add cppcheck job):.gitlab-ci.yml
