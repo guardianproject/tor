@@ -6791,6 +6791,15 @@ get_data_directory(const char *val)
   } else {
     return tor_strdup(get_windows_conf_root());
   }
+#elif defined(__ANDROID__)
+  /* Android apps can only use paths that are configured at runtime.
+   * /data/local/tmp is guaranteed to exist, but is only usable by the
+   * 'shell' and 'root' users, so this fallback is for debugging only. */
+  if (val) {
+    return tor_strdup(val);
+  } else {
+    return tor_strdup("/data/local/tmp");
+  }
 #else /* !defined(_WIN32) */
   const char *d = val;
   if (!d)
