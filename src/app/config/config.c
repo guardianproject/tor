@@ -473,6 +473,13 @@ static const config_var_t option_vars_[] = {
 #ifdef _WIN32
   V(GeoIPFile,                   FILENAME, "<default>"),
   V(GeoIPv6File,                 FILENAME, "<default>"),
+#elif defined(__ANDROID__)
+  /* Android apps use paths that are configured at runtime.
+   * /data/local/tmp is guaranteed to exist, but will only be
+   * usable by the 'shell' and 'root' users, so this fallback is
+   * for debugging only. */
+  V(GeoIPFile,                   FILENAME, "/data/local/tmp/geoip"),
+  V(GeoIPv6File,                 FILENAME, "/data/local/tmp/geoip6"),
 #else
   V(GeoIPFile,                   FILENAME,
     SHARE_DATADIR PATH_SEPARATOR "tor" PATH_SEPARATOR "geoip"),
