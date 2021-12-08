@@ -240,6 +240,7 @@ Java_org_torproject_jni_TorService_mainConfigurationFree
     fprintf(stderr, "ConfigurationFree: The Tor configuration is NULL!\n");
     return;
   }
+  unset_owning_controller_socket(cfg);
   tor_main_configuration_free(cfg);
 }
 
