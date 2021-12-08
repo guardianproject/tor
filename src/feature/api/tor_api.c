@@ -98,6 +98,17 @@ tor_main_configuration_set_command_line(tor_main_configuration_t *cfg,
   return 0;
 }
 
+/*
+ * Temporary workaround for a double close crash with fdsan.
+ * See: https://github.com/guardianproject/tor-android/issues/57
+ * Should be removed once fixed in Tor upstream.
+ */
+void
+unset_owning_controller_socket(tor_main_configuration_t* t)
+{
+    t->owning_controller_socket = -1;
+}
+
 tor_control_socket_t
 tor_main_configuration_setup_control_socket(tor_main_configuration_t *cfg)
 {
