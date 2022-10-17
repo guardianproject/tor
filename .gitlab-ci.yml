@@ -52,7 +52,7 @@ variables:
       echo 'quiet "1";' \
            'APT::Install-Recommends "0";' \
            'APT::Install-Suggests "0";' \
-           'APT::Acquire::Retries "20";' \
+           'Acquire::Retries "20";' \
            'APT::Get::Assume-Yes "true";' \
            'Dpkg::Use-Pty "0";' \
            "Dir::Cache::Archives \"${APT_CACHE_DIR}\"; " \
