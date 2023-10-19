@@ -19,7 +19,6 @@ ClientPreferIPv6DirPort 1
 ClientPreferIPv6ORPort 1
 ClientRejectInternalAddresses 0
 ClientUseIPv4 0
-ClientUseIPv6 1
 ConnDirectionStatistics 1
 ConnectionPadding 1
 ConnLimit 64
@@ -125,7 +124,6 @@ ReachableORAddresses 128.0.0.0/8
 RejectPlaintextPorts 23
 RelayBandwidthBurst 10000
 RelayBandwidthRate 1000
-RendPostPeriod 600
 RephistTrackTime 600
 SafeLogging 0
 Schedulers Vanilla,KISTLite,Kist

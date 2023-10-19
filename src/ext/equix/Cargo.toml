@@ -1,0 +1,23 @@
+# See doc/HACKING/Rust.md
+#
+# This is a low-level Rust wrapper around Equi-X and its embedded copy of
+# HashX, provided for cross-compatibility testing within Arti.
+# This module does not make API stability guarantees.
+
+# Copyright (c) 2020 tevador <tevador@gmail.com>
+# See LICENSE for licensing information
+
+[package]
+name = "tor-c-equix"
+version = "0.2.0"
+edition = "2021"
+license = "LGPL-3.0-only"
+
+publish = false
+
+[build-dependencies]
+bindgen = "0.66.1"
+cc = { version = "1.0", features = ["parallel"] }
+
+[dev-dependencies]
+hex-literal = "0.4.1"

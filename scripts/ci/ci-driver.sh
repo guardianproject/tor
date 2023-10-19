@@ -37,6 +37,7 @@ ALL_BUGS_ARE_FATAL="${ALL_BUGS_ARE_FATAL:-no}"
 DISABLE_DIRAUTH="${DISABLE_DIRAUTH:-no}"
 DISABLE_RELAY="${DISABLE_RELAY:-no}"
 NSS="${NSS:-no}"
+GPL="${GPL:-no}"
 
 # Options for which tests to run.   All should be yes/no.
 CHECK="${CHECK:-yes}"
@@ -200,6 +201,7 @@ yes_or_no ALL_BUGS_ARE_FATAL
 yes_or_no DISABLE_DIRAUTH
 yes_or_no DISABLE_RELAY
 yes_or_no NSS
+yes_or_no GPL
 
 yes_or_no RUN_STAGE_CONFIGURE
 yes_or_no RUN_STAGE_BUILD
@@ -262,6 +264,9 @@ fi
 if [[ "$NSS" == "yes" ]]; then
     configure_options+=("--enable-nss")
 fi
+if [[ "$GPL" == "yes" ]]; then
+    configure_options+=("--enable-gpl")
+fi
 
 #############################################################################
 # Tell the user about our versions of different tools and packages.
@@ -293,15 +298,11 @@ TOR_VER_AT_LEAST_044=no
 # These are the currently supported Tor versions; no need to work with anything
 # ancient in this script.
 case "$TOR_VERSION" in
-    0.4.5.*)
-        TOR_VER_AT_LEAST_043=yes
-        TOR_VER_AT_LEAST_044=yes
-        ;;
-    0.4.6.*)
-        TOR_VER_AT_LEAST_043=yes
-        TOR_VER_AT_LEAST_044=yes
-        ;;
     0.4.7.*)
+        TOR_VER_AT_LEAST_043=yes
+        TOR_VER_AT_LEAST_044=yes
+        ;;
+    0.4.8.*)
         TOR_VER_AT_LEAST_043=yes
         TOR_VER_AT_LEAST_044=yes
         ;;
@@ -456,7 +457,7 @@ if [[ "${STEM}" = "yes" ]]; then
     start_section "Stem"
     # 0.3.5 and onward have now disabled onion service v2 so we need to exclude
     # these Stem tests from now on.
-    EXCLUDE_TESTS="--exclude-test control.controller.test_ephemeral_hidden_services_v2 --exclude-test control.controller.test_hidden_services_conf --exclude-test control.controller.test_with_ephemeral_hidden_services_basic_auth --exclude-test control.controller.test_without_ephemeral_hidden_services --exclude-test control.controller.test_with_ephemeral_hidden_services_basic_auth_no_credentials"
+    EXCLUDE_TESTS="--exclude-test control.controller.test_ephemeral_hidden_services_v2 --exclude-test control.controller.test_hidden_services_conf --exclude-test control.controller.test_with_ephemeral_hidden_services_basic_auth --exclude-test control.controller.test_without_ephemeral_hidden_services --exclude-test control.controller.test_with_ephemeral_hidden_services_basic_auth_no_credentials --exclude-test control.controller.test_with_detached_ephemeral_hidden_services --exclude-test control.controller.test_with_invalid_ephemeral_hidden_service_port --exclude-test control.controller.test_ephemeral_hidden_services_v3"
     if [[ "${TOR_VER_AT_LEAST_044}" = 'yes' ]]; then
         # XXXX This should probably be part of some test-stem make target.
 

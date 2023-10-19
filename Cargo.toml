@@ -1,0 +1,15 @@
+# See doc/HACKING/Rust.md
+#
+# There is no plan to offer a stable Rust API to the C implementation of Tor.
+# This workspace is for wrapper crates that are used internally by Arti for
+# cross-compatibility and comparison testing.
+
+[workspace]
+
+members = [
+    "src/ext/equix",
+    "scripts/maint/geoip/geoip-db-tool",
+]
+
+resolver = "2"
+

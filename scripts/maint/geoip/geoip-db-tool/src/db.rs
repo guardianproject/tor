@@ -13,9 +13,9 @@ where
 }
 
 pub enum AnyBlock {
-    NetBlock(NetBlock),
-    AsBlock(AsBlock),
-    OtherBlock,
+    Net(NetBlock),
+    As(AsBlock),
+    Other,
 }
 
 impl<I> BlockReader<I>
@@ -50,13 +50,13 @@ where
     fn get_block(&mut self) -> Option<std::io::Result<AnyBlock>> {
         let mut kv = HashMap::new();
 
-        while let Some(line) = self.iter.next() {
+        for line in self.iter.by_ref() {
             //dbg!(&line);
             if let Err(e) = line {
                 return Some(Err(e));
             }
             let line_orig = line.unwrap();
-            let line = line_orig.splitn(2, '#').next().unwrap().trim();
+            let line = line_orig.split('#').next().unwrap().trim();
             if line.is_empty() {
                 if kv.is_empty() {
                     continue;
@@ -80,13 +80,13 @@ where
             let asn = kv.get("aut-num").unwrap(); // XXXX handle error better
             assert!(asn.starts_with("AS"));
             let asn = asn[2..].parse().unwrap();
-            return Some(Ok(AnyBlock::AsBlock(AsBlock { name, asn })));
+            return Some(Ok(AnyBlock::As(AsBlock { name, asn })));
         }
 
         let net = if let Some(net) = kv.get("net") {
             net.parse().unwrap() //XXXX handle the error better.
         } else {
-            return Some(Ok(AnyBlock::OtherBlock));
+            return Some(Ok(AnyBlock::Other));
         };
 
         let asn = if let Some(asn) = kv.get("aut-num") {
@@ -113,7 +113,7 @@ where
         let is_anycast = is_true(kv.get("is-anycast-proxy"));
         let is_satellite = is_true(kv.get("is-satellite-provider"));
 
-        Some(Ok(AnyBlock::NetBlock(NetBlock {
+        Some(Ok(AnyBlock::Net(NetBlock {
             net,
             asn,
             cc,

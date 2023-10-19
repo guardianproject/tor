@@ -71,6 +71,7 @@ core.*
 /stamp-h1
 /tags
 /TAGS
+/target
 /test-driver
 /tor.sh
 /tor.spec
@@ -138,6 +139,8 @@ core.*
 # /scripts
 /scripts/maint/checkOptionDocs.pl
 /scripts/maint/updateVersions.pl
+scripts/maint/geoip/geoip
+scripts/maint/geoip/geoip6
 
 # /src/
 /src/Makefile

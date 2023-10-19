@@ -73,3 +73,40 @@ struct trn_cell_introduce_encrypted {
   /* Optional padding. This might be empty or not. */
   u8 pad[];
 };
+
+/*
+ * INTRODUCE1 cell (encrypted section) extensions.
+ */
+
+/* Cell extenstion type Congestion Control Request. */
+const TRUNNEL_EXT_TYPE_CC_REQUEST = 0x01;
+/* Cell extension type PoW. */
+const TRUNNEL_EXT_TYPE_POW = 0x02;
+
+/*
+ * PoW Solution Extension. Proposal 327.
+ */
+
+const TRUNNEL_POW_NONCE_LEN = 16;
+const TRUNNEL_POW_SOLUTION_LEN = 16;
+const TRUNNEL_POW_SEED_HEAD_LEN = 4;
+
+/* Version 1 is based on Equi-X scheme. */
+const TRUNNEL_POW_VERSION_EQUIX = 0x01;
+
+struct trn_cell_extension_pow {
+  /* Type of PoW system used. */
+  u8 pow_version IN [0x01];
+
+  /* Nonce */
+  u8 pow_nonce[TRUNNEL_POW_NONCE_LEN];
+
+  /* Effort */
+  u32 pow_effort;
+
+  /* Identifiable prefix from the seed. */
+  u8 pow_seed[TRUNNEL_POW_SEED_HEAD_LEN];
+
+  /* Solution. */
+  u8 pow_solution[TRUNNEL_POW_SOLUTION_LEN];
+};

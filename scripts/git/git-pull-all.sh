@@ -168,19 +168,6 @@ function fetch_origin
   fi
 }
 
-# Fetch tor-gitlab pull requests. No arguments.
-function fetch_tor_gitlab
-{
-  local cmd="git fetch tor-gitlab"
-  printf "%s Fetching tor-gitlab..." "$MARKER"
-  if [ $DRY_RUN -eq 0 ]; then
-    msg=$( eval "$cmd" 2>&1 )
-    validate_ret $? "$msg"
-  else
-    printf "\\n      %s\\n" "${IWTH}$cmd${CNRM}"
-  fi
-}
-
 ###############
 # Entry point #
 ###############
@@ -188,10 +175,7 @@ function fetch_tor_gitlab
 # Get into our origin repository.
 goto_repo "$ORIGIN_PATH"
 
-# First, fetch tor-gitlab
-fetch_tor_gitlab
-
-# Then, fetch the origin.
+# Fetch the origin.
 fetch_origin
 
 # Go over all configured worktree.
