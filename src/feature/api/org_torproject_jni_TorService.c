@@ -3,10 +3,13 @@
  * Copyright (c) 2007-2019, The Tor Project, Inc. */
 /* See LICENSE for licensing information */
 
-#include "tor_api.h"
 #include "org_torproject_jni_TorService.h"
 #include "orconfig.h"
 #include "lib/malloc/malloc.h"
+#include "app/main/shutdown.h"
+#include "feature/api/tor_api.h"
+#include "feature/api/tor_api_internal.h"
+
 
 #include <jni.h>
 #include <stdbool.h>
