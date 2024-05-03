@@ -5,7 +5,6 @@ dnl See LICENSE for licensing information
 
 AC_PREREQ([2.63])
 AC_INIT([tor],[0.4.8.11])
->>>>>>> 9a117c4c97 (version: Bump version to 0.4.7.9-dev)
 AC_CONFIG_SRCDIR([src/app/main/tor_main.c])
 AC_CONFIG_MACRO_DIR([m4])
 
