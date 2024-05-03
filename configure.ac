@@ -4,7 +4,8 @@ dnl Copyright (c) 2007-2019, The Tor Project, Inc.
 dnl See LICENSE for licensing information
 
 AC_PREREQ([2.63])
-AC_INIT([tor],[0.4.8.9])
+AC_INIT([tor],[0.4.8.11])
+>>>>>>> 9a117c4c97 (version: Bump version to 0.4.7.9-dev)
 AC_CONFIG_SRCDIR([src/app/main/tor_main.c])
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -18,7 +19,7 @@ AC_DEFINE_UNQUOTED([CONFIG_FLAGS], ["$configure_flags"], [Flags passed to config
 # version number changes.  Tor uses it to make sure that it
 # only shuts down for missing "required protocols" when those protocols
 # are listed as required by a consensus after this date.
-AC_DEFINE(APPROX_RELEASE_DATE, ["2023-11-09"], # for 0.4.8.9
+AC_DEFINE(APPROX_RELEASE_DATE, ["2024-04-10"], # for 0.4.8.11
           [Approximate date when this software was released. (Updated when the version changes.)])
 
 # "foreign" means we don't follow GNU package layout standards
@@ -164,12 +165,12 @@ AM_CONDITIONAL(USE_OPENSSL, test "x$enable_nss" != "xyes")
 
 if test "x$enable_coverage" = "xyes"; then
   AC_DEFINE(ENABLE_COVERAGE, 1,
-  	    [Defined if coverage support is enabled for the unit tests])
+        [Defined if coverage support is enabled for the unit tests])
 fi
 
 if test "x$enable_nss" = "xyes"; then
   AC_DEFINE(ENABLE_NSS, 1,
-  	    [Defined if we're building with NSS.])
+        [Defined if we're building with NSS.])
 else
   AC_DEFINE(ENABLE_OPENSSL, 1,
             [Defined if we're building with OpenSSL or LibreSSL])
@@ -487,9 +488,9 @@ dnl cross-compiling.
 if test "x$enable_tool_name_check" != "xno"; then
     if test "x$ac_tool_warned" = "xyes"; then
         AC_MSG_ERROR([We are cross compiling but could not find a properly named toolchain. Do you have your cross-compiling toolchain in PATH? (You can --disable-tool-name-check to ignore this.)])
-	elif test "x$ac_ct_AR" != "x" -a "x$cross_compiling" = "xmaybe"; then
-		AC_MSG_ERROR([We think we are cross compiling but could not find a properly named toolchain. Do you have your cross-compiling toolchain in PATH? (You can --disable-tool-name-check to ignore this.)])
-	fi
+    elif test "x$ac_ct_AR" != "x" -a "x$cross_compiling" = "xmaybe"; then
+        AC_MSG_ERROR([We think we are cross compiling but could not find a properly named toolchain. Do you have your cross-compiling toolchain in PATH? (You can --disable-tool-name-check to ignore this.)])
+    fi
 fi
 
 AC_PROG_CC
@@ -530,9 +531,9 @@ m4_version_prereq([2.70], [:], [AC_PROG_CC_C99])
 
 AC_CACHE_CHECK([for Python 3], [tor_cv_PYTHON],
    [AC_PATH_PROGS_FEATURE_CHECK([PYTHON], [ \
-	python3 \
-	python3.8 python3.7 python3.6 python3.5 python3.4 \
-	python ],
+    python3 \
+    python3.8 python3.7 python3.6 python3.5 python3.4 \
+    python ],
    [["$ac_path_PYTHON" -c 'import sys; sys.exit(sys.version_info[0]<3)' && tor_cv_PYTHON="$ac_path_PYTHON" ac_path_PYTHON_found=:]] )])
 AC_SUBST([PYTHON], [$tor_cv_PYTHON])
 
@@ -571,8 +572,8 @@ AC_CACHE_CHECK([for working C99 mid-block declaration syntax],
       tor_cv_c_c99_decl,
       [AC_COMPILE_IFELSE(
          [AC_LANG_PROGRAM([], [int x; x = 3; int y; y = 4 + x;])],
-	 [tor_cv_c_c99_decl=yes],
-	 [tor_cv_c_c99_decl=no] )])
+     [tor_cv_c_c99_decl=yes],
+     [tor_cv_c_c99_decl=no] )])
 if test "$tor_cv_c_c99_decl" != "yes"; then
   AC_MSG_ERROR([Your compiler doesn't support c99 mid-block declarations. This is required as of Tor 0.2.6.x])
 fi
@@ -581,9 +582,9 @@ AC_CACHE_CHECK([for working C99 designated initializers],
       tor_cv_c_c99_designated_init,
       [AC_COMPILE_IFELSE(
          [AC_LANG_PROGRAM([struct s { int a; int b; };],
-  	       [[ struct s ss = { .b = 5, .a = 6 }; ]])],
-	 [tor_cv_c_c99_designated_init=yes],
-	 [tor_cv_c_c99_designated_init=no] )])
+           [[ struct s ss = { .b = 5, .a = 6 }; ]])],
+     [tor_cv_c_c99_designated_init=yes],
+     [tor_cv_c_c99_designated_init=no] )])
 
 if test "$tor_cv_c_c99_designated_init" != "yes"; then
   AC_MSG_ERROR([Your compiler doesn't support c99 designated initializers. This is required as of Tor 0.2.6.x])
@@ -595,10 +596,10 @@ AC_CACHE_CHECK([for __attribute__((fallthrough))],
       tor_cv_c_attr_fallthrough,
       [AC_COMPILE_IFELSE(
          [AC_LANG_PROGRAM([extern int x; void fn(void) ;],
-	       [[ switch (x) { case 1: fn(); __attribute__((fallthrough));
+           [[ switch (x) { case 1: fn(); __attribute__((fallthrough));
                                case 2: fn(); break; } ]])],
-	 [tor_cv_c_attr_fallthrough=yes],
-	 [tor_cv_c_attr_fallthrough=no] )])
+     [tor_cv_c_attr_fallthrough=yes],
+     [tor_cv_c_attr_fallthrough=no] )])
 CFLAGS="$saved_CFLAGS"
 
 if test "$tor_cv_c_attr_fallthrough" = "yes"; then
@@ -718,64 +719,64 @@ AM_CONDITIONAL(THREADS_WIN32, test "$bwin32" = "true")
 AM_CONDITIONAL(THREADS_PTHREADS, test "$bwin32" = "false")
 
 AC_CHECK_FUNCS(
-	_NSGetEnviron \
-	RtlSecureZeroMemory \
-	SecureZeroMemory \
-	accept4 \
-	backtrace \
-	backtrace_symbols_fd \
-	eventfd \
-	explicit_bzero \
-	timingsafe_memcmp \
-	flock \
-	fsync \
-	ftime \
-	get_current_dir_name \
-	getaddrinfo \
-	getdelim \
-	getifaddrs \
-	getline \
-	getrlimit \
-	gettimeofday \
-	gmtime_r \
-	gnu_get_libc_version \
-	inet_aton \
-	ioctl \
-	issetugid \
-	llround \
-	localtime_r \
-	lround \
-	madvise \
-	memmem \
-	memset_s \
-	minherit \
-	mmap \
-	pipe \
-	pipe2 \
-	prctl \
-	readpassphrase \
-	rint \
-	sigaction \
-	snprintf \
-	socketpair \
-	statvfs \
-	strncasecmp \
-	strcasecmp \
-	strlcat \
-	strlcpy \
-	strnlen \
-	strptime \
-	strtok_r \
-	strtoull \
-	sysconf \
-	sysctl \
+    _NSGetEnviron \
+    RtlSecureZeroMemory \
+    SecureZeroMemory \
+    accept4 \
+    backtrace \
+    backtrace_symbols_fd \
+    eventfd \
+    explicit_bzero \
+    timingsafe_memcmp \
+    flock \
+    fsync \
+    ftime \
+    get_current_dir_name \
+    getaddrinfo \
+    getdelim \
+    getifaddrs \
+    getline \
+    getrlimit \
+    gettimeofday \
+    gmtime_r \
+    gnu_get_libc_version \
+    inet_aton \
+    ioctl \
+    issetugid \
+    llround \
+    localtime_r \
+    lround \
+    madvise \
+    memmem \
+    memset_s \
+    minherit \
+    mmap \
+    pipe \
+    pipe2 \
+    prctl \
+    readpassphrase \
+    rint \
+    sigaction \
+    snprintf \
+    socketpair \
+    statvfs \
+    strncasecmp \
+    strcasecmp \
+    strlcat \
+    strlcpy \
+    strnlen \
+    strptime \
+    strtok_r \
+    strtoull \
+    sysconf \
+    sysctl \
         timegm \
-	truncate \
-	uname \
-	usleep \
-	vasprintf \
-	_vscprintf \
-	vsnprintf
+    truncate \
+    uname \
+    usleep \
+    vasprintf \
+    _vscprintf \
+    vsnprintf
 )
 
 # Apple messed up when they added some functions: they
@@ -1152,17 +1153,17 @@ dnl check the openssl version number, but in practice that gets pretty
 dnl confusing with LibreSSL, OpenSSL, and various distributions' patches
 dnl to them.
 AC_CHECK_FUNCS([ \
-		ERR_load_KDF_strings \
-		EVP_PBE_scrypt \
-		SSL_CIPHER_find \
-		SSL_CTX_set1_groups_list \
-		SSL_CTX_set_security_level \
-		SSL_SESSION_get_master_key \
-		SSL_get_client_ciphers \
-		SSL_get_client_random \
-		SSL_get_server_random \
-		TLS_method \
-	       ])
+        ERR_load_KDF_strings \
+        EVP_PBE_scrypt \
+        SSL_CIPHER_find \
+        SSL_CTX_set1_groups_list \
+        SSL_CTX_set_security_level \
+        SSL_SESSION_get_master_key \
+        SSL_get_client_ciphers \
+        SSL_get_client_random \
+        SSL_get_server_random \
+        TLS_method \
+           ])
 
 dnl Check if OpenSSL structures are opaque
 AC_CHECK_MEMBERS([SSL.state], , ,
@@ -1441,32 +1442,32 @@ if test "$have_clang" = "yes"; then
       AC_LANG_SOURCE([[
           #include <stdint.h>
           #include <stdlib.h>
-	  int main(int argc, char **argv)
-	  {
+      int main(int argc, char **argv)
+      {
             int64_t x = ((int64_t)atoi(argv[1])) * (int64_t)atoi(argv[2])
-	                * (int64_t)atoi(argv[3]);
-	    return x == 9;
-	  } ]])],
-	  [ftrapv_can_link=yes; AC_MSG_RESULT([yes])],
-	  [ftrapv_can_link=no; AC_MSG_RESULT([no])])
+                    * (int64_t)atoi(argv[3]);
+        return x == 9;
+      } ]])],
+      [ftrapv_can_link=yes; AC_MSG_RESULT([yes])],
+      [ftrapv_can_link=no; AC_MSG_RESULT([no])])
   if test "$ftrapv_can_link" = "no"; then
     AC_MSG_CHECKING([whether defining __mulodi4 fixes that])
     AC_LINK_IFELSE([
       AC_LANG_SOURCE([[
           #include <stdint.h>
           #include <stdlib.h>
-	  int64_t __mulodi4(int64_t a, int64_t b, int *overflow) {
+      int64_t __mulodi4(int64_t a, int64_t b, int *overflow) {
              *overflow=0;
-	     return a;
+         return a;
           }
-	  int main(int argc, char **argv)
-	  {
+      int main(int argc, char **argv)
+      {
             int64_t x = ((int64_t)atoi(argv[1])) * (int64_t)atoi(argv[2])
-	                * (int64_t)atoi(argv[3]);
-	    return x == 9;
-	  } ]])],
-	  [mulodi_fixes_ftrapv=yes; AC_MSG_RESULT([yes])],
-	  [mulodi_fixes_ftrapv=no; AC_MSG_RESULT([no])])
+                    * (int64_t)atoi(argv[3]);
+        return x == 9;
+      } ]])],
+      [mulodi_fixes_ftrapv=yes; AC_MSG_RESULT([yes])],
+      [mulodi_fixes_ftrapv=no; AC_MSG_RESULT([no])])
   fi
   CFLAGS="$saved_CFLAGS"
 fi
@@ -1573,7 +1574,7 @@ AC_CACHE_CHECK([whether we can use curve25519-donna-c64],
       }
   ], [dnl
     int ok = func( ((uint64_t)2000000000) * 1000000000,
-    	         ((uint64_t)1234567890) << 24);
+                 ((uint64_t)1234567890) << 24);
         return !ok;
       ])],
           [tor_cv_can_use_curve25519_donna_c64=cross],
@@ -1634,56 +1635,56 @@ dnl Make sure to enable support for large off_t if available.
 AC_SYS_LARGEFILE
 
 AC_CHECK_HEADERS([errno.h \
-		  fcntl.h \
-		  signal.h \
-		  string.h \
-		  sys/capability.h \
-		  sys/fcntl.h \
-		  sys/stat.h \
-		  sys/time.h \
-		  sys/types.h \
-		  time.h \
-		  unistd.h \
-		  arpa/inet.h \
-		  crt_externs.h \
-		  execinfo.h \
-		  gnu/libc-version.h \
-		  grp.h \
-		  ifaddrs.h \
-		  inttypes.h \
-		  limits.h \
-		  linux/types.h \
-		  mach/vm_inherit.h \
-		  machine/limits.h \
-		  malloc.h \
-		  netdb.h \
-		  netinet/in.h \
-		  netinet/in6.h \
-		  pwd.h \
-		  readpassphrase.h \
-		  stdatomic.h \
-		  sys/eventfd.h \
-		  sys/file.h \
-		  sys/ioctl.h \
-		  sys/limits.h \
-		  sys/mman.h \
-		  sys/param.h \
-		  sys/prctl.h \
-		  sys/random.h \
-		  sys/resource.h \
-		  sys/select.h \
-		  sys/socket.h \
-		  sys/statvfs.h \
-		  sys/syscall.h \
-		  sys/sysctl.h \
-		  sys/time.h \
-		  sys/types.h \
-		  sys/un.h \
-		  sys/utime.h \
-		  sys/wait.h \
-		  syslog.h \
-		  utime.h \
-		  glob.h])
+          fcntl.h \
+          signal.h \
+          string.h \
+          sys/capability.h \
+          sys/fcntl.h \
+          sys/stat.h \
+          sys/time.h \
+          sys/types.h \
+          time.h \
+          unistd.h \
+          arpa/inet.h \
+          crt_externs.h \
+          execinfo.h \
+          gnu/libc-version.h \
+          grp.h \
+          ifaddrs.h \
+          inttypes.h \
+          limits.h \
+          linux/types.h \
+          mach/vm_inherit.h \
+          machine/limits.h \
+          malloc.h \
+          netdb.h \
+          netinet/in.h \
+          netinet/in6.h \
+          pwd.h \
+          readpassphrase.h \
+          stdatomic.h \
+          sys/eventfd.h \
+          sys/file.h \
+          sys/ioctl.h \
+          sys/limits.h \
+          sys/mman.h \
+          sys/param.h \
+          sys/prctl.h \
+          sys/random.h \
+          sys/resource.h \
+          sys/select.h \
+          sys/socket.h \
+          sys/statvfs.h \
+          sys/syscall.h \
+          sys/sysctl.h \
+          sys/time.h \
+          sys/types.h \
+          sys/un.h \
+          sys/utime.h \
+          sys/wait.h \
+          syslog.h \
+          utime.h \
+          glob.h])
 
 AC_CHECK_HEADERS(sys/param.h)
 
@@ -2090,9 +2091,9 @@ AC_ARG_WITH(malloc,
 AS_CASE([$malloc],
   [tcmalloc], [
       PKG_CHECK_MODULES([TCMALLOC],
-			[libtcmalloc],
-			have_tcmalloc=yes,
-			have_tcmalloc=no)
+            [libtcmalloc],
+            have_tcmalloc=yes,
+            have_tcmalloc=no)
 
       if test "x$have_tcmalloc" = "xno" ; then
           AC_MSG_ERROR([Unable to find tcmalloc requested by --with-malloc, $pkg_config_user_action, or set TCMALLOC_CFLAGS and TCMALLOC_LIBS.])
@@ -2104,9 +2105,9 @@ AS_CASE([$malloc],
 
   [jemalloc], [
       PKG_CHECK_MODULES([JEMALLOC],
-		        [jemalloc],
-			have_jemalloc=yes,
-			have_jemalloc=no)
+                [jemalloc],
+            have_jemalloc=yes,
+            have_jemalloc=no)
 
       if test "x$have_jemalloc" = "xno" ; then
           AC_MSG_ERROR([Unable to find jemalloc requested by --with-malloc, $pkg_config_user_action, or set JEMALLOC_CFLAGS and JEMALLOC_LIBS.])
@@ -2666,12 +2667,12 @@ AC_DEFINE([EQUIX_STATIC], [1], [We statically link with EquiX])
 CPPFLAGS="$CPPFLAGS $TOR_CPPFLAGS_libevent $TOR_CPPFLAGS_openssl $TOR_CPPFLAGS_zlib"
 
 AC_CONFIG_FILES([
-	Doxyfile
-	Makefile
-	contrib/operator-tools/tor.logrotate
-	src/config/torrc.sample
-	src/config/torrc.minimal
-	scripts/maint/checkOptionDocs.pl
+    Doxyfile
+    Makefile
+    contrib/operator-tools/tor.logrotate
+    src/config/torrc.sample
+    src/config/torrc.minimal
+    scripts/maint/checkOptionDocs.pl
         warning_flags
 ])
 

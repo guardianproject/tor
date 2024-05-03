@@ -257,7 +257,6 @@ debian-packaging-0.4.6:
     - if: $CI_PROJECT_NAMESPACE == "tpo/core" &&
           $CI_COMMIT_BRANCH == "maint-0.4.6"
 
-#####
 # Run tests written in Rust, and run clippy on all Rust code here.
 rust-latest:
   image: rust:latest
