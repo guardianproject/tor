@@ -46,15 +46,6 @@ Java_org_torproject_jni_TorService_mainConfigurationFree
 
 /*
  * Class:     org_torproject_jni_TorService
- * Method:    apiGetProviderVersion
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL
-Java_org_torproject_jni_TorService_apiGetProviderVersion
-(JNIEnv *, jobject);
-
-/*
- * Class:     org_torproject_jni_TorService
  * Method:    runMain
  * Signature: ()I
  */

@@ -247,14 +247,6 @@ Java_org_torproject_jni_TorService_mainConfigurationFree
   tor_main_configuration_free(cfg);
 }
 
-JNIEXPORT jstring JNICALL
-Java_org_torproject_jni_TorService_apiGetProviderVersion
-(JNIEnv *env, jobject _ignore)
-{
-  UNUSED(_ignore);
-  return (*env)->NewStringUTF(env, tor_api_get_provider_version());
-}
-
 JNIEXPORT jint JNICALL
 Java_org_torproject_jni_TorService_runMain
 (JNIEnv *env, jobject thisObj)
