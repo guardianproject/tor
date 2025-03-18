@@ -96,7 +96,7 @@ where
         };
 
         let cc = if let Some(country) = kv.get("country") {
-            assert!(country.as_bytes().len() == 2);
+            assert!(country.len() == 2);
             country.as_bytes()[0..2].try_into().unwrap()
         } else {
             *b"??"
