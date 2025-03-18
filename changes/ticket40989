@@ -1,0 +1,4 @@
+  o Minor bugfixes (memory):
+    - Fix a pointer free that wasn't set to NULL afterwards which could be
+      reused by calling back in the free all function. Fixes bug 40989; bugfix
+      on 0.4.8.13.

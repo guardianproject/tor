@@ -574,6 +574,9 @@ Changes in version 0.4.8.1-alpha - 2023-06-01
     - The wrong max queue cell size was used in a protocol warning
       logging statement. Fixes bug 40745; bugfix on 0.4.7.1-alpha.
 
+  o Minor bugfixes (compilation):
+    - Fix all -Werror=enum-int-mismatch warnings. No behavior change.
+      Fixes bug 40824; bugfix on 0.3.5.1-alpha.
   o Minor bugfixes (logging):
     - Avoid ""double-quoting"" strings in several log messages. Fixes
       bug 22723; bugfix on 0.1.2.2-alpha.
@@ -584,6 +587,9 @@ Changes in version 0.4.8.1-alpha - 2023-06-01
     - Decrement hs_intro_established_count on introduction circuit
       close. Fixes bug 40751; bugfix on 0.4.7.12.
 
+  o Minor bugfixes (sandbox):
+    - Allow membarrier for the sandbox. And allow rt_sigprocmask when
+      compiled with LTTng. Fixes bug 40799; bugfix on 0.3.5.1-alpha.
   o Minor bugfixes (pluggable transports, windows):
     - Remove a warning `BUG()` that could occur when attempting to
       execute a non-existing pluggable transport on Windows. Fixes bug
