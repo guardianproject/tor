@@ -1,2 +1,0 @@
-  o Minor feature (authority):
-    - Reject 0.4.7.x series at the authority level. Closes ticket 40896.

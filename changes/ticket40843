@@ -1,3 +1,0 @@
-  o Minor bugfix (NetBSD, compilation):
-    - Fix compilation issue on NetBSD by avoiding an unnecessary dependency on
-      "huge" page mappings in Equi-X. Fixes bug 40843; bugfix on 0.4.8.1-alpha.

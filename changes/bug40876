@@ -1,8 +1,0 @@
-  o Major bugfixes (guard usage):
-    - When Tor excluded a guard due to temporary circuit restrictions,
-      it considered *additional* primary guards for potential usage
-      by that circuit. This could result in more than the specified number
-      of guards (currently 2) being used, long-term, by the tor client.
-      This could happen when a Guard was also selected as an Exit node,
-      but it was exacerbated by the Conflux guard restrictions. Both
-      instances have been fixed. Fixes bug 40876; bugfix on 0.3.0.1-alpha.

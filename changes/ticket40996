@@ -1,5 +1,0 @@
-  o Major bugfixes (onion service directory cache):
-    - When the OOM killer kicks in, cleanup the descriptor cache of an HSDir by
-      looking at the lowest downloaded count instead of time in cache. Fixes bug
-      40996; bugfix on 0.3.5.1-alpha.
-

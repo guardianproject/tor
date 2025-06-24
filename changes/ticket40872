@@ -1,3 +1,0 @@
-  o Minor bugfixes (control port):
-    - Correctly report conflux pair information to controller fields
-      Fixes bug 40872; bugfix on 0.4.8.1-alpha

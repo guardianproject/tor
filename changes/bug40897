@@ -1,6 +1,0 @@
-  o Major bugfixes (TROVE-2023-007, exit):
-    - Improper error propagation from a safety check in conflux leg
-      linking lead to a desynchronization of which legs were part of
-      a conflux set, ultimately causing a UAF and NULL pointer
-      dereference crash on Exit relays. Fixes bug 40897;
-      bugfix on 0.4.8.1-alpha.

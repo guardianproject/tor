@@ -1,4 +1,0 @@
-  o Minor bugfix (NetBSD, testing):
-    - Fix test failures in "crypto/hashx" and "slow/crypto/equix" on x86_64
-      and aarch64 NetBSD hosts, by adding support for PROT_MPROTECT() flags.
-      Fixes bug 40844; bugfix on 0.4.8.1-alpha.

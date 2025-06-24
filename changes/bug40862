@@ -1,3 +1,0 @@
-  o Major bugfixes (conflux):
-    - Fix an issue that prevented us from pre-building more conflux sets after
-      existing sets had been used. Fixes bug 40862; bugfix on 0.4.8.1-alpha.

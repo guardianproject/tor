@@ -1,3 +1,0 @@
-  o Minor bugfixes (conflux):
-    - Avoid a potential hard assert (crash) when sending a cell on a Conflux
-      set. Fixes bug 40921; bugfix on 0.4.8.1-alpha.

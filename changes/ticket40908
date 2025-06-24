@@ -1,5 +1,0 @@
-  o Minor bugfixes (conflux):
-    - Make sure we don't process a closed circuit when packaging data. This lead
-      to a non fatal BUG() spamming logs. Fixes bug 40908; bugfix on
-      0.4.8.1-alpha.
-

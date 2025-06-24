@@ -1,6 +1,0 @@
-  o Major bugfixes (onion service):
-    - Fix a reliability issue where services were expiring their
-      introduction points every consensus update. This caused connectivity
-      issues for clients caching the old descriptor and intro points. Bug
-      reported and fixed by gitlab user @hyunsoo.kim676. Fixes bug 40858;
-      bugfix on 0.4.7.5-alpha.

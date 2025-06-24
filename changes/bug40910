@@ -1,5 +1,0 @@
-  o Minor bugfixes (directory authorities):
-    - Add a warning when publishing a vote or signatures to another
-      directory authority fails. Fixes bug 40910; bugfix on
-      0.2.0.3-alpha.
-

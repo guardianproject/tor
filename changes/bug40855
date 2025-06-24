@@ -1,6 +1,0 @@
-  o Minor bugfixes (bridge authority):
-    - When reporting a pseudo-networkstatus as a bridge authority,
-      or answering "ns/purpose/*" controller requests,
-      include accurate published-on dates from our
-      list of router descriptors.  Fixes bug 40855;
-      bugfix on 0.4.8.1-alpha.

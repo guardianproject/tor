@@ -1,3 +1,0 @@
-  o Minor bugfixes (bridges, statistics):
-    - Correctly report statistics for client count over Pluggable transport.
-      Fixes bug 40871; bugfix on 0.4.8.4

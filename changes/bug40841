@@ -1,5 +1,0 @@
-  o Minor bugfixes (conflux):
-    - Demote a relay-side warn about too many legs to ProtocolWarn,
-      as there are conditions that it can briefly happen during set
-      construction. Also add additional set logging details for
-      all error cases. Fixes bug 40841; bugfix on 0.4.8.1-alpha.

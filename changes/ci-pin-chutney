@@ -1,3 +1,0 @@
-  o Minor feature (testing, CI):
-    - Use a fixed version of chutney (be881a1e) instead of its current HEAD.
-      This version should also be preferred when testing locally.

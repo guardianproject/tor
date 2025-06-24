@@ -1,3 +1,0 @@
-  o Minor bugfix (circuit):
-    - Remove a log_warn being triggered by a protocol violation that already
-      emits a protocol warning log. Fixes bug 40932; bugfix on 0.4.8.1-alpha.

@@ -1,9 +1,0 @@
-  o Major bugfixes (circuit building):
-    - Conflux circuit building was ignoring the "predicted ports" feature,
-      which aims to make Tor stop building circuits if there have been
-      no user requests lately. This bug led to every idle Tor on the
-      network building and discarding circuits every 30 seconds, which
-      added overall load to the network, used bandwidth and battery from
-      clients that weren't actively using their Tor, and kept sockets open
-      on guards which added connection padding essentially forever. Fixes
-      bug 40981; bugfix on 0.4.8.1-alpha;

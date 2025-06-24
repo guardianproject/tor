@@ -1,5 +1,0 @@
-  o Minor bugfixes (relay flag usage):
-    - Fix client usage of the MiddleOnly flag so that MiddleOnly relays are
-      not used as HS IP or RP by clients or services. Additionally, give
-      dirauths the ability to remove specific flags, as an alternative to
-      MiddleOnly. Fixes bug 41023; bugfix on 0.4.7.2-alpha

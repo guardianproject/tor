@@ -1,4 +1,0 @@
-  o Minor bugfixes (conflux):
-    - Prevent non-fatal assert stacktrace caused by using conflux
-      sets during their teardown process. Fixes bug 40842;
-      bugfix on 0.4.8.1-alpha.

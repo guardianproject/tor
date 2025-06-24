@@ -1,3 +1,0 @@
-  o Minor bugfixes (sandbox, bwauth):
-    - Fix sandbox to work for bandwidth authority. Fixes bug 40933; bugfix on
-      0.2.2.1-alpha

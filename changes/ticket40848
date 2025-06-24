@@ -1,4 +1,0 @@
-  o Minor bugfix (defensive programming):
-    - Disable multiple BUG warnings of a missing relay identity key when
-      starting an instance of Tor compiled without relay support.
-      Fixes bug 40848; bugfix on 0.4.3.1-alpha.

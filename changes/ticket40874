@@ -1,3 +1,0 @@
-  o Major bugfixes (TROVE-2023-004, relay):
-    - Mitigate an issue when Tor compiled with OpenSSL can crash during
-      handshake with a remote relay. Fixes bug 40874; bugfix on 0.2.7.2-alpha.

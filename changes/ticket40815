@@ -1,4 +1,0 @@
-  o Minor bugfixes (compression, zstd):
-    - Use less frightening language and lower the log-level of our run-time ABI
-      compatibility check message in our Zstd compression subsystem. Fixes bug
-      40815; bugfix on 0.4.3.1-alpha.

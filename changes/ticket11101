@@ -1,4 +1,0 @@
-  o Minor feature (bridges, pluggable transport):
-    - Add STATUS TYPE=version handler for Pluggable Transport. This allows us to
-      gather version statistics on Pluggable Transport usage from bridge servers
-      on our metrics portal. Closes ticket 11101.

@@ -1,5 +1,0 @@
-  o Minor feature (directory authority):
-    - Allow BandwidthFiles "node_id" KeyValue without the dollar sign at the
-      start of the hexdigit, in order to easier database queries combining
-      Tor documents in which the relays fingerprint does not include it.
-      Fixes bug 40891; bugfix on 0.4.7 (all supported versions of Tor).

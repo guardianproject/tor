@@ -1,3 +1,0 @@
-  o Minor features (debugging, compression):
-    - Log the input and output buffer sizes when we detect a potential
-      compression bomb. Diagnostic for ticket 40739.

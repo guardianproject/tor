@@ -1,3 +1,349 @@
+Changes in version 0.4.8.16 - 2025-03-24
+  This is quick second release since 0.4.8.15 due to a typo in a directory
+  authority rule file. This only affects directory authorities. Regardless,
+  upgrading to latest stable is always desired.
+
+  o Minor features (geoip data):
+    - Update the geoip files to match the IPFire Location Database, as
+      retrieved on 2025/03/24.
+
+  o Minor bugfix (dirauth):
+    - Fix typo in flag assignment approved-routers file. Fixes bug
+      41035; bugfix on 0.4.8.15
+
+Changes in version 0.4.8.15 - 2025-03-20
+  This is a minor release fixing a sandbox issue for bandwidth authority and a
+  conflux issue on the control port. It also has a client fix about relay flag
+  usage. We strongly recommend to update as soon as possible as usual.
+
+  o Minor feature (testing, CI):
+    - Use a fixed version of chutney (be881a1e) instead of its current
+      HEAD. This version should also be preferred when testing locally.
+
+  o Minor features (continuous integration):
+    - Upgrade CI runners to use Debian Bookworm instead of Bullseye.
+      Closes ticket 41029.
+
+  o Minor features (fallbackdir):
+    - Regenerate fallback directories generated on March 20, 2025.
+
+  o Minor features (geoip data):
+    - Update the geoip files to match the IPFire Location Database, as
+      retrieved on 2025/03/20.
+
+  o Minor bugfixes (control port):
+    - Correctly report conflux pair information to controller fields
+      Fixes bug 40872; bugfix on 0.4.8.1-alpha
+
+  o Minor bugfixes (relay flag usage):
+    - Fix client usage of the MiddleOnly flag so that MiddleOnly relays
+      are not used as HS IP or RP by clients or services. Additionally,
+      give dirauths the ability to remove specific flags, as an
+      alternative to MiddleOnly. Fixes bug 41023; bugfix on 0.4.7.2-alpha
+
+  o Minor bugfixes (sandbox, bwauth):
+    - Fix sandbox to work for bandwidth authority. Fixes bug 40933;
+      bugfix on 0.2.2.1-alpha
+
+
+Changes in version 0.4.8.14 - 2025-02-05
+  Minor release fixing a major bug affecting onion service directory cache,
+  also known as HSDir. Furthermore, the fallbackdir list had more than 25% of
+  its entries unreachable or gone from the consensus. As usual, we strongly
+  recommend to update to this version as soon as possible.
+
+  o Major bugfixes (onion service directory cache):
+    - When the OOM killer kicks in, cleanup the descriptor cache of an
+      HSDir by looking at the lowest downloaded count instead of time in
+      cache. Fixes bug 40996; bugfix on 0.3.5.1-alpha.
+
+  o Minor feature (testing):
+    - test-network now unconditionally includes IPv6 instead of trying
+      to detect IPv6 support.
+
+  o Minor features (fallbackdir):
+    - Regenerate fallback directories generated on February 05, 2025.
+
+  o Minor features (geoip data):
+    - Update the geoip files to match the IPFire Location Database, as
+      retrieved on 2025/02/05.
+
+  o Minor bugfixes (memory):
+    - Fix a pointer free that wasn't set to NULL afterwards which could
+      be reused by calling back in the free all function. Fixes bug
+      40989; bugfix on 0.4.8.13.
+
+
+Changes in version 0.4.8.13 - 2024-10-24
+  This is minor release fixing an important client circuit building (Conflux
+  related) bug which lead to performance degradation and extra load on the
+  network. Some minor memory leaks fixes as well as an important minor feature
+  for pluggable transports. We strongly recommend to update as soon as possible
+  for clients in order to neutralize this conflux bug.
+
+  o Major bugfixes (circuit building):
+    - Conflux circuit building was ignoring the "predicted ports"
+      feature, which aims to make Tor stop building circuits if there
+      have been no user requests lately. This bug led to every idle Tor
+      on the network building and discarding circuits every 30 seconds,
+      which added overall load to the network, used bandwidth and
+      battery from clients that weren't actively using their Tor, and
+      kept sockets open on guards which added connection padding
+      essentially forever. Fixes bug 40981; bugfix on 0.4.8.1-alpha;
+
+  o Minor feature (bridges, pluggable transport):
+    - Add STATUS TYPE=version handler for Pluggable Transport. This
+      allows us to gather version statistics on Pluggable Transport
+      usage from bridge servers on our metrics portal. Closes
+      ticket 11101.
+
+  o Minor features (fallbackdir):
+    - Regenerate fallback directories generated on October 24, 2024.
+
+  o Minor features (geoip data):
+    - Update the geoip files to match the IPFire Location Database, as
+      retrieved on 2024/10/24.
+
+  o Minor bugfixes (memleak, authority):
+    - Fix a small memleak when computing a new consensus. This only
+      affects directory authorities. Fixes bug 40966; bugfix
+      on 0.3.5.1-alpha.
+
+  o Minor bugfixes (memory):
+    - Fix memory leaks of the CPU worker code during shutdown. Fixes bug
+      833; bugfix on 0.3.5.1-alpha.
+
+
+Changes in version 0.4.8.12 - 2024-06-06
+  This is a minor release with couple bugfixes affecting conflux and logging.
+  We also have the return of faravahar directory authority with new keys and
+  address.
+
+  o Minor feature (dirauth):
+    - Add back faravahar with a new address and new keys. Closes 40689.
+
+  o Minor features (fallbackdir):
+    - Regenerate fallback directories generated on June 06, 2024.
+
+  o Minor features (geoip data):
+    - Update the geoip files to match the IPFire Location Database, as
+      retrieved on 2024/06/06.
+
+  o Minor bugfix (circuit):
+    - Remove a log_warn being triggered by a protocol violation that
+      already emits a protocol warning log. Fixes bug 40932; bugfix
+      on 0.4.8.1-alpha.
+
+  o Minor bugfixes (conflux):
+    - Avoid a potential hard assert (crash) when sending a cell on a
+      Conflux set. Fixes bug 40921; bugfix on 0.4.8.1-alpha.
+    - Make sure we don't process a closed circuit when packaging data.
+      This lead to a non fatal BUG() spamming logs. Fixes bug 40908;
+      bugfix on 0.4.8.1-alpha.
+
+
+Changes in version 0.4.8.11 - 2024-04-10
+  This is a minor release mostly to upgrade the fallbackdir list. Worth noting
+  also that directory authority running this version will now automatically
+  reject relays running the end of life 0.4.7.x version.
+
+  o Minor feature (authority):
+    - Reject 0.4.7.x series at the authority level. Closes ticket 40896.
+
+  o Minor feature (dirauth, tor26):
+    - New IP address and keys.
+
+  o Minor feature (directory authority):
+    - Allow BandwidthFiles "node_id" KeyValue without the dollar sign at
+      the start of the hexdigit, in order to easier database queries
+      combining Tor documents in which the relays fingerprint does not
+      include it. Fixes bug 40891; bugfix on 0.4.7 (all supported
+      versions of Tor).
+
+  o Minor features (fallbackdir):
+    - Regenerate fallback directories generated on April 10, 2024.
+
+  o Minor features (geoip data):
+    - Update the geoip files to match the IPFire Location Database, as
+      retrieved on 2024/04/10.
+
+  o Minor bugfixes (directory authorities):
+    - Add a warning when publishing a vote or signatures to another
+      directory authority fails. Fixes bug 40910; bugfix
+      on 0.2.0.3-alpha.
+
+
+Changes in version 0.4.8.10 - 2023-12-08
+  This is a security release fixing a high severity bug (TROVE-2023-007)
+  affecting Exit relays supporting Conflux. We strongly recommend to update as
+  soon as possible.
+
+  o Major bugfixes (TROVE-2023-007, exit):
+    - Improper error propagation from a safety check in conflux leg
+      linking lead to a desynchronization of which legs were part of a
+      conflux set, ultimately causing a UAF and NULL pointer dereference
+      crash on Exit relays. Fixes bug 40897; bugfix on 0.4.8.1-alpha.
+
+  o Minor features (fallbackdir):
+    - Regenerate fallback directories generated on December 08, 2023.
+
+  o Minor features (geoip data):
+    - Update the geoip files to match the IPFire Location Database, as
+      retrieved on 2023/12/08.
+
+  o Minor bugfixes (bridges, statistics):
+    - Correctly report statistics for client count over Pluggable
+      transport. Fixes bug 40871; bugfix on 0.4.8.4
+
+
+Changes in version 0.4.8.9 - 2023-11-09
+  This is another security release fixing a high severity bug affecting onion
+  services which is tracked by TROVE-2023-006. We are also releasing a guard
+  major bugfix as well. If you are an onion service operator, we strongly
+  recommend to update as soon as possible.
+
+  o Major bugfixes (guard usage):
+    - When Tor excluded a guard due to temporary circuit restrictions,
+      it considered *additional* primary guards for potential usage by
+      that circuit. This could result in more than the specified number
+      of guards (currently 2) being used, long-term, by the tor client.
+      This could happen when a Guard was also selected as an Exit node,
+      but it was exacerbated by the Conflux guard restrictions. Both
+      instances have been fixed. Fixes bug 40876; bugfix
+      on 0.3.0.1-alpha.
+
+  o Major bugfixes (onion service, TROVE-2023-006):
+    - Fix a possible hard assert on a NULL pointer when recording a
+      failed rendezvous circuit on the service side for the MetricsPort.
+      Fixes bug 40883; bugfix on 0.4.8.1-alpha
+
+  o Minor features (fallbackdir):
+    - Regenerate fallback directories generated on November 09, 2023.
+
+  o Minor features (geoip data):
+    - Update the geoip files to match the IPFire Location Database, as
+      retrieved on 2023/11/09.
+
+
+Changes in version 0.4.8.8 - 2023-11-03
+  We are releasing today a fix for a high security issue, TROVE-2023-004, that
+  is affecting relays. Also a few minor bugfixes detailed below. Please upgrade
+  as soon as posssible.
+
+  o Major bugfixes (TROVE-2023-004, relay):
+    - Mitigate an issue when Tor compiled with OpenSSL can crash during
+      handshake with a remote relay. Fixes bug 40874; bugfix
+      on 0.2.7.2-alpha.
+
+  o Minor features (fallbackdir):
+    - Regenerate fallback directories generated on November 03, 2023.
+
+  o Minor features (geoip data):
+    - Update the geoip files to match the IPFire Location Database, as
+      retrieved on 2023/11/03.
+
+  o Minor bugfixes (directory authority):
+    - Look at the network parameter "maxunmeasuredbw" with the correct
+      spelling. Fixes bug 40869; bugfix on 0.4.6.1-alpha.
+
+  o Minor bugfixes (vanguards addon support):
+    - Count the conflux linked cell as valid when it is successfully
+      processed. This will quiet a spurious warn in the vanguards addon.
+      Fixes bug 40878; bugfix on 0.4.8.1-alpha.
+
+
+Changes in version 0.4.8.7 - 2023-09-25
+  This version fixes a single major bug in the Conflux subsystem on the client
+  side. See below for more information. The upcoming Tor Browser 13 stable will
+  pick this up.
+
+  o Major bugfixes (conflux):
+    - Fix an issue that prevented us from pre-building more conflux sets
+      after existing sets had been used. Fixes bug 40862; bugfix
+      on 0.4.8.1-alpha.
+
+  o Minor features (fallbackdir):
+    - Regenerate fallback directories generated on September 25, 2023.
+
+  o Minor features (geoip data):
+    - Update the geoip files to match the IPFire Location Database, as
+      retrieved on 2023/09/25.
+
+
+Changes in version 0.4.8.6 - 2023-09-18
+  This version contains an important fix for onion service regarding congestion
+  control and its reliability. Apart from that, uneeded BUG warnings have been
+  suppressed especially about a compression bomb seen on relays. We strongly
+  recommend, in particular onion service operators, to upgrade as soon as
+  possible to this latest stable.
+
+  o Major bugfixes (onion service):
+    - Fix a reliability issue where services were expiring their
+      introduction points every consensus update. This caused
+      connectivity issues for clients caching the old descriptor and
+      intro points. Bug reported and fixed by gitlab user
+      @hyunsoo.kim676. Fixes bug 40858; bugfix on 0.4.7.5-alpha.
+
+  o Minor features (debugging, compression):
+    - Log the input and output buffer sizes when we detect a potential
+      compression bomb. Diagnostic for ticket 40739.
+
+  o Minor features (fallbackdir):
+    - Regenerate fallback directories generated on September 18, 2023.
+
+  o Minor features (geoip data):
+    - Update the geoip files to match the IPFire Location Database, as
+      retrieved on 2023/09/18.
+
+  o Minor bugfix (defensive programming):
+    - Disable multiple BUG warnings of a missing relay identity key when
+      starting an instance of Tor compiled without relay support. Fixes
+      bug 40848; bugfix on 0.4.3.1-alpha.
+
+  o Minor bugfixes (bridge authority):
+    - When reporting a pseudo-networkstatus as a bridge authority, or
+      answering "ns/purpose/*" controller requests, include accurate
+      published-on dates from our list of router descriptors. Fixes bug
+      40855; bugfix on 0.4.8.1-alpha.
+
+  o Minor bugfixes (compression, zstd):
+    - Use less frightening language and lower the log-level of our run-
+      time ABI compatibility check message in our Zstd compression
+      subsystem. Fixes bug 40815; bugfix on 0.4.3.1-alpha.
+
+
+Changes in version 0.4.8.5 - 2023-08-30
+  Quick second release after the first stable few days ago fixing minor
+  annoying bugfixes creating log BUG stacktrace. We also fix BSD compilation
+  failures and PoW unit test.
+
+  o Minor features (fallbackdir):
+    - Regenerate fallback directories generated on August 30, 2023.
+
+  o Minor features (geoip data):
+    - Update the geoip files to match the IPFire Location Database, as
+      retrieved on 2023/08/30.
+
+  o Minor bugfix (NetBSD, compilation):
+    - Fix compilation issue on NetBSD by avoiding an unnecessary
+      dependency on "huge" page mappings in Equi-X. Fixes bug 40843;
+      bugfix on 0.4.8.1-alpha.
+
+  o Minor bugfix (NetBSD, testing):
+    - Fix test failures in "crypto/hashx" and "slow/crypto/equix" on
+      x86_64 and aarch64 NetBSD hosts, by adding support for
+      PROT_MPROTECT() flags. Fixes bug 40844; bugfix on 0.4.8.1-alpha.
+
+  o Minor bugfixes (conflux):
+    - Demote a relay-side warn about too many legs to ProtocolWarn, as
+      there are conditions that it can briefly happen during set
+      construction. Also add additional set logging details for all
+      error cases. Fixes bug 40841; bugfix on 0.4.8.1-alpha.
+    - Prevent non-fatal assert stacktrace caused by using conflux sets
+      during their teardown process. Fixes bug 40842; bugfix
+      on 0.4.8.1-alpha.
+
+
 Changes in version 0.4.8.4 - 2023-08-23
   Finally, this is the very first stable release of the 0.4.8.x series making
   Proof-of-Work (prop#327) and Conflux (prop#329) available to the entire
@@ -276,6 +622,9 @@ Changes in version 0.4.8.1-alpha - 2023-06-01
     - The wrong max queue cell size was used in a protocol warning
       logging statement. Fixes bug 40745; bugfix on 0.4.7.1-alpha.
 
+  o Minor bugfixes (compilation):
+    - Fix all -Werror=enum-int-mismatch warnings. No behavior change.
+      Fixes bug 40824; bugfix on 0.3.5.1-alpha.
   o Minor bugfixes (logging):
     - Avoid ""double-quoting"" strings in several log messages. Fixes
       bug 22723; bugfix on 0.1.2.2-alpha.
@@ -286,6 +635,9 @@ Changes in version 0.4.8.1-alpha - 2023-06-01
     - Decrement hs_intro_established_count on introduction circuit
       close. Fixes bug 40751; bugfix on 0.4.7.12.
 
+  o Minor bugfixes (sandbox):
+    - Allow membarrier for the sandbox. And allow rt_sigprocmask when
+      compiled with LTTng. Fixes bug 40799; bugfix on 0.3.5.1-alpha.
   o Minor bugfixes (pluggable transports, windows):
     - Remove a warning `BUG()` that could occur when attempting to
       execute a non-existing pluggable transport on Windows. Fixes bug

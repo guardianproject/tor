@@ -1,3 +1,0 @@
-  o Minor bugfix (dirauth):
-    - Fix typo in flag assignment approved-routers file. Fixes bug 41035; bugfix
-      on 0.4.8.15

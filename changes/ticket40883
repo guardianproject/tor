@@ -1,4 +1,0 @@
-  o Major bugfixes (onion service, TROVE-2023-006):
-    - Fix a possible hard assert on a NULL pointer when recording a failed
-      rendezvous circuit on the service side for the MetricsPort. Fixes bug
-      40883; bugfix on 0.4.8.1-alpha

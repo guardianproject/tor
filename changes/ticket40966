@@ -1,3 +1,0 @@
-  o Minor bugfixes (memleak, authority):
-    - Fix a small memleak when computing a new consensus. This only affects
-      directory authorities. Fixes bug 40966; bugfix on 0.3.5.1-alpha.

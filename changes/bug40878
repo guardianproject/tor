@@ -1,4 +1,0 @@
-  o Minor bugfixes (vanguards addon support):
-    - Count the conflux linked cell as valid when it is successfully
-      processed. This will quiet a spurious warn in the vanguards addon.
-      Fixes bug 40878; bugfix on 0.4.8.1-alpha.

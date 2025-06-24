@@ -1,3 +1,0 @@
-  o Minor feature (testing):
-    - test-network now unconditionally includes IPv6 instead of trying to
-      detect IPv6 support.
