@@ -176,7 +176,7 @@ fn convert(args: Args) -> std::io::Result<()> {
     for nb in blocks {
         n += 1;
         if n % 100000 == 0 {
-            println!("{}/{}", n, num_blocks);
+            println!("{n}/{num_blocks}");
         }
         let start = nb.net.network();
         let end = nb.net.broadcast();
