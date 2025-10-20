@@ -148,8 +148,6 @@ debian-i386-minimal:
 #####
 # Run "make check" with a hardened clang on debian stable.  This takes
 # care of a hardening check, and a compile-with-clang check.
-#
-# TODO: This will be faster once we merge #40098 and #40099.
 debian-hardened:
   image: containers.torproject.org/tpo/tpa/base-images/debian:bookworm
   <<: *debian-template

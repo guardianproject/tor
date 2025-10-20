@@ -9,6 +9,6 @@ publish = false
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-ipnetwork= "0.17.0"
-rangemap = "0.1.10"
-argh = "0.1.4"
+ipnetwork= "0.21"
+rangemap = "1.6"
+argh = "0.1.13"
