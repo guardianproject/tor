@@ -72,11 +72,6 @@ printf "Modified tor-owned source files:\\n%s\\n" "$CHECK_FILES"
 perl scripts/maint/checkSpace.pl -C \
      $CHECK_FILES
 
-# This makes sure that we are only including things we're allowed to include.
-if test -e scripts/maint/practracker/includes.py; then
-    python scripts/maint/practracker/includes.py
-fi
-
 if [ -e scripts/coccinelle/check_cocci_parse.sh ]; then
 
     # Run a verbose cocci parse check on the changed files

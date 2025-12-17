@@ -22,6 +22,7 @@
 #include "lib/crypt_ops/crypto_openssl_mgt.h"
 #include "lib/crypt_ops/crypto_nss_mgt.h"
 #include "lib/crypt_ops/crypto_rand.h"
+#include "lib/crypt_ops/crypto_rsa.h"
 #include "lib/crypt_ops/crypto_sys.h"
 #include "lib/crypt_ops/crypto_options_st.h"
 #include "lib/conf/conftypes.h"
@@ -98,6 +99,23 @@ crypto_global_init(int useAccel, const char *accelName, const char *accelDir)
 #ifdef ENABLE_OPENSSL
     if (crypto_openssl_late_init(useAccel, accelName, accelDir) < 0)
       return -1;
+
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
+    /* Pre-initialize OpenSSL 3.x crypto to avoid thread-safety issues. */
+    {
+      crypto_pk_t *warmup_key = crypto_pk_new();
+      if (warmup_key) {
+        if (crypto_pk_generate_key_with_bits(warmup_key, 512) == 0) {
+          unsigned char dummy_msg[20] = {0};
+          unsigned char dummy_sig[128];
+          crypto_pk_private_sign(warmup_key, (char*)dummy_sig,
+                                 sizeof(dummy_sig),
+                                 (char*)dummy_msg, sizeof(dummy_msg));
+        }
+        crypto_pk_free(warmup_key);
+      }
+    }
+#endif /* OPENSSL_VERSION_NUMBER >= 0x30000000L */
 #else
     (void)useAccel;
     (void)accelName;
