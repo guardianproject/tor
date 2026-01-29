@@ -1,0 +1,9 @@
+  o Major bugfixes (threading):
+    - Fix race condition where main thread could proceed with cleanup
+      before worker threads finished exiting, causing crashes when
+      workers tried to acquire already-freed mutexes. Replace mutex
+      ownership transfer pattern with explicit worker counting and
+      condition variable signaling. Pre-initialize OpenSSL crypto
+      subsystems before creating worker threads to prevent initialization
+      races (OpenSSL 3.x). Add atomic operations for thread-safe log
+      level checking. Fixes bug 41127; bugfix on 0.4.8.13-dev.
