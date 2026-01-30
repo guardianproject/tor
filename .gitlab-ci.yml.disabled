@@ -111,8 +111,9 @@ variables:
     - |
       if [ "$CHUTNEY" = yes ]; then
         # Use a fixed version of chutney to avoid surprise breakage.
-        CHUTNEY_SHALLOW_SINCE=2024-10-28
-        CHUTNEY_COMMIT=be881a1e7c4bc8038fa13fde4a7b24e5c56349c4
+        CHUTNEY_SHALLOW_SINCE=2026-01-20
+        # main @ 2026-01-21
+        CHUTNEY_COMMIT=3338f5cae5dbce3f6c465326784b8b34952bcd62
 
         git clone --shallow-since "$CHUTNEY_SHALLOW_SINCE" https://gitlab.torproject.org/tpo/core/chutney.git
         git -C ./chutney checkout "$CHUTNEY_COMMIT"
