@@ -184,8 +184,13 @@ static int pretty_fn_has_parens = 0;
   STMT_END
 
 /** What's the lowest log level anybody cares about?  Checking this lets us
- * bail out early from log_debug if we aren't debugging.  */
+ * bail out early from log_debug if we aren't debugging.
+ * Uses atomic operations for thread-safe access without locking. */
+#ifdef HAVE_WORKING_STDATOMIC
+atomic_int log_global_min_severity_;
+#else
 int log_global_min_severity_ = LOG_NOTICE;
+#endif
 
 static void delete_log(logfile_t *victim);
 static void close_log(logfile_t *victim);
@@ -223,7 +228,11 @@ int
 log_message_is_interesting(int severity, log_domain_mask_t domain)
 {
   (void) domain;
+#ifdef HAVE_WORKING_STDATOMIC
+  return (severity <= atomic_load(&log_global_min_severity_));
+#else
   return (severity <= log_global_min_severity_);
+#endif
 }
 
 /**
@@ -595,8 +604,13 @@ tor_log(int severity, log_domain_mask_t domain, const char *format, ...)
   /* check that domain is composed of known domains and flags */
   raw_assert((domain & (LD_ALL_DOMAINS|LD_ALL_FLAGS)) == domain);
 
+#ifdef HAVE_WORKING_STDATOMIC
+  if (severity > atomic_load(&log_global_min_severity_))
+    return;
+#else
   if (severity > log_global_min_severity_)
     return;
+#endif
   va_start(ap,format);
 #ifdef TOR_UNIT_TESTS
   if (domain & LD_NO_MOCK)
@@ -709,8 +723,13 @@ log_fn_(int severity, log_domain_mask_t domain, const char *fn,
   va_list ap;
   if ((domain & LD_BUG) && (severity >= LOG_WARN))
     tor_bug_increment_count_();
+#ifdef HAVE_WORKING_STDATOMIC
+  if (severity > atomic_load(&log_global_min_severity_))
+    return;
+#else
   if (severity > log_global_min_severity_)
     return;
+#endif
   va_start(ap,format);
   logv(severity, domain, fn, NULL, format, ap);
   va_end(ap);
@@ -723,8 +742,13 @@ log_fn_ratelim_(ratelim_t *ratelim, int severity, log_domain_mask_t domain,
   char *m;
   if ((domain & LD_BUG) && (severity >= LOG_WARN))
     tor_bug_increment_count_();
+#ifdef HAVE_WORKING_STDATOMIC
+  if (severity > atomic_load(&log_global_min_severity_))
+    return;
+#else
   if (severity > log_global_min_severity_)
     return;
+#endif
   m = rate_limit_log(ratelim, approx_time());
   if (m == NULL)
       return;
@@ -897,7 +921,11 @@ add_stream_log_impl,(const log_severity_list_t *severity,
   lf->next = logfiles;
 
   logfiles = lf;
+#ifdef HAVE_WORKING_STDATOMIC
+  atomic_store(&log_global_min_severity_, get_min_log_level());
+#else
   log_global_min_severity_ = get_min_log_level();
+#endif
 }
 
 /** Add a log handler named <b>name</b> to send all messages in <b>severity</b>
@@ -920,6 +948,9 @@ init_logging(int disable_startup_queue)
     tor_bug_init_counter();
     log_mutex_initialized = 1;
   }
+#ifdef HAVE_WORKING_STDATOMIC
+  atomic_init(&log_global_min_severity_, LOG_NOTICE);
+#endif
 #ifdef __GNUC__
   if (strchr(__PRETTY_FUNCTION__, '(')) {
     pretty_fn_has_parens = 1;
@@ -992,7 +1023,11 @@ add_callback_log(const log_severity_list_t *severity, log_callback cb)
 
   LOCK_LOGS();
   logfiles = lf;
+#ifdef HAVE_WORKING_STDATOMIC
+  atomic_store(&log_global_min_severity_, get_min_log_level());
+#else
   log_global_min_severity_ = get_min_log_level();
+#endif
   UNLOCK_LOGS();
   return 0;
 }
@@ -1012,7 +1047,11 @@ change_callback_log_severity(int loglevelMin, int loglevelMax,
       memcpy(lf->severities, &severities, sizeof(severities));
     }
   }
+#ifdef HAVE_WORKING_STDATOMIC
+  atomic_store(&log_global_min_severity_, get_min_log_level());
+#else
   log_global_min_severity_ = get_min_log_level();
+#endif
   UNLOCK_LOGS();
 }
 
@@ -1115,7 +1154,11 @@ close_temp_logs(void)
     }
   }
 
+#ifdef HAVE_WORKING_STDATOMIC
+  atomic_store(&log_global_min_severity_, get_min_log_level());
+#else
   log_global_min_severity_ = get_min_log_level();
+#endif
   UNLOCK_LOGS();
 }
 
@@ -1166,7 +1209,11 @@ add_file_log,(const log_severity_list_t *severity,
   add_stream_log_impl(severity, filename, fd);
   logfiles->needs_close = 1;
   lf = logfiles;
+#ifdef HAVE_WORKING_STDATOMIC
+  atomic_store(&log_global_min_severity_, get_min_log_level());
+#else
   log_global_min_severity_ = get_min_log_level();
+#endif
 
   if (log_tor_version(lf, 0) < 0) {
     delete_log(lf);
@@ -1208,7 +1255,11 @@ add_syslog_log(const log_severity_list_t *severity,
   LOCK_LOGS();
   lf->next = logfiles;
   logfiles = lf;
+#ifdef HAVE_WORKING_STDATOMIC
+  atomic_store(&log_global_min_severity_, get_min_log_level());
+#else
   log_global_min_severity_ = get_min_log_level();
+#endif
   UNLOCK_LOGS();
   return 0;
 }
@@ -1453,7 +1504,11 @@ switch_logs_debug(void)
     for (i = LOG_DEBUG; i >= LOG_ERR; --i)
       lf->severities->masks[SEVERITY_MASK_IDX(i)] = LD_ALL_DOMAINS;
   }
+#ifdef HAVE_WORKING_STDATOMIC
+  atomic_store(&log_global_min_severity_, get_min_log_level());
+#else
   log_global_min_severity_ = get_min_log_level();
+#endif
   UNLOCK_LOGS();
 }
 
