@@ -33,6 +33,7 @@
 #define LOG_PRIVATE
 #include "lib/log/log.h"
 #include "lib/log/log_sys.h"
+#include "lib/log/util_bug.h"
 #include "lib/version/git_revision.h"
 #include "lib/log/ratelim.h"
 #include "lib/lock/compat_mutex.h"
@@ -940,6 +941,7 @@ init_logging(int disable_startup_queue)
 {
   if (!log_mutex_initialized) {
     tor_mutex_init(&log_mutex);
+    tor_bug_init_counter();
     log_mutex_initialized = 1;
   }
 #ifdef HAVE_WORKING_STDATOMIC

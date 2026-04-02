@@ -162,7 +162,7 @@ if [[ $GITIDX = 1 ]]; then
     git stash -q --keep-index
     # For some reasons, shellcheck is not seeing that we can call this
     # function from the trap below.
-    # shellcheck disable=SC2317
+    # shellcheck disable=SC2317,SC2329
     function restoregit() {
         note "Restoring git state"
         git stash pop -q
@@ -170,7 +170,7 @@ if [[ $GITIDX = 1 ]]; then
 else
     # For some reasons, shellcheck is not seeing that we can call this
     # function from the trap below.
-    # shellcheck disable=SC2317
+    # shellcheck disable=SC2317,SC2329
     function restoregit() {
         true
     }

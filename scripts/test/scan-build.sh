@@ -48,7 +48,7 @@ NOISY_CHECKERS="\
     -enable-checker alpha.deadcode.UnreachableCode \
 "
 
-if test "x$SCAN_BUILD_OUTPUT" != "x"; then
+if test "$SCAN_BUILD_OUTPUT" != ""; then
    OUTPUTARG="-o $SCAN_BUILD_OUTPUT"
 else
    OUTPUTARG=""

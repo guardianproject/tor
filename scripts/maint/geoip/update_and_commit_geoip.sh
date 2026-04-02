@@ -32,3 +32,5 @@ EOF
 git add "$CHANGESFILE"
 
 git commit -a -m "Update geoip files to match ipfire location db, $SLASH_DATE."
+
+exit 0

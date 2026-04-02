@@ -18,6 +18,7 @@ from __future__ import unicode_literals
 import os
 import re
 import sys
+import yaml
 
 if len(sys.argv) != 3:
     print("Syntax: get_mozilla_ciphers.py <firefox-source-dir> <openssl-source-dir>", file=sys.stderr)
@@ -37,11 +38,16 @@ def ossl(s):
 fileA = open(ff('security/manager/ssl/nsNSSComponent.cpp'),'r')
 
 # The input format is a file containing exactly one section of the form:
-# static CipherPref CipherPrefs[] = {
-#  {"name", MACRO_NAME}, // comment
-#  ...
-#  {NULL, 0}
-# }
+# static const CipherPref sCipherPrefs[] = {
+#    {"security.ssl3.ecdhe_rsa_aes_128_gcm_sha256",
+#     TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+#     StaticPrefs::security_ssl3_ecdhe_rsa_aes_128_gcm_sha256},
+#    {"security.ssl3.ecdhe_ecdsa_aes_128_gcm_sha256",
+#     TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+#     StaticPrefs::security_ssl3_ecdhe_ecdsa_aes_128_gcm_sha256},
+#    ...
+#    },
+# };
 
 inCipherSection = False
 cipherLines = []
@@ -51,7 +57,7 @@ for line in fileA:
         inCipherSection = True
     elif inCipherSection:
         line = line.strip()
-        if line.startswith('{ nullptr, 0}'):
+        if line.startswith('};'):
             # At the ending boundary of the Cipher Prefs
             break
         else:
@@ -61,30 +67,35 @@ fileA.close()
 # Parse the lines and put them into a dict
 ciphers = {}
 cipher_pref = {}
-key_pending = None
-for line in cipherLines:
-    m = re.search(r'^{\s*\"([^\"]+)\",\s*(\S+)\s*(?:,\s*(true|false))?\s*}', line)
-    if m:
-        assert not key_pending
-        key,value,enabled = m.groups()
-        if enabled == 'true':
-            ciphers[key] = value
-            cipher_pref[value] = key
+cipherLines = " ".join(cipherLines)
+pat = re.compile(
+        r'''
+             \"security. ([^\"]+) \", \s*
+             ([^\s,]+)\s*, \s*
+             StaticPrefs::security_(\S+)
+         ''',
+        re.X)
+while cipherLines:
+    c = cipherLines.split("}", maxsplit=1)
+    if len(c) == 2:
+        cipherLines = c[1]
+    else:
+        cipherLines = ""
+    line = c[0]
+
+    m = pat.search(line)
+    if not m:
+        if line != ",":
+            print("can't parse:", line)
         continue
-    m = re.search(r'^{\s*\"([^\"]+)\",', line)
-    if m:
-        assert not key_pending
-        key_pending = m.group(1)
-        continue
-    m = re.search(r'^\s*(\S+)(?:,\s*(true|false))+\s*}', line)
-    if m:
-        assert key_pending
-        key = key_pending
-        value,enabled = m.groups()
-        key_pending = None
-        if enabled == 'true':
-            ciphers[key] = value
-            cipher_pref[value] = key
+
+    ident = m.group(1).replace(".", "_")
+
+    ciphers[ident] = m.group(2)
+
+    cipher_pref[m.group(2)] = m.group(3)
+
+    continue
 
 ####
 # Now find the correct order for the ciphers
@@ -106,28 +117,32 @@ for line in fileC:
 
 fileC.close()
 
+
 #####
-# Read the JS file to understand what ciphers are enabled.  The format is
-#  pref("name", true/false);
-# Build a map enabled_ciphers from javascript name to "true" or "false",
-# and an (unordered!) list of the macro names for those ciphers that are
-# enabled.
-fileB = open(ff('netwerk/base/security-prefs.js'), 'r')
+# Read the yaml file where the preferences are defined.
+
+fileB = open(ff('modules/libpref/init/StaticPrefList.yaml'), 'r').read()
+fileB, _ = re.subn(r'@([^@]*)@', r'"\1"', fileB)
+
+yaml_file = yaml.load(fileB, Loader=yaml.Loader)
 
 enabled_ciphers = {}
-for line in fileB:
-    m = re.match(r'pref\(\"([^\"]+)\"\s*,\s*(\S*)\s*\)', line)
-    if not m:
-        continue
-    key, val = m.groups()
-    if key.startswith("security.ssl3"):
-        enabled_ciphers[key] = val
-fileB.close()
+for entry in yaml_file:
+    name = entry['name']
+    if name.startswith("security.ssl3.") and "deprecated" not in name:
+        name = name.removeprefix("security.")
+        name = name.replace(".", "_")
+        enabled_ciphers[name] = entry['value']
 
 used_ciphers = []
 for k, v in enabled_ciphers.items():
-    if v == "true":
+    if v in (True, "True", "true", "IS_NOT_EARLY_BETA_OR_EARLIER"):
         used_ciphers.append(ciphers[k])
+    elif v == False:
+        pass
+    else:
+        print(f"Warning: unexpected value {v!r} for 'enabled'", file=sys.stderr)
+        sys.exit(1)
 
 #oSSLinclude = ('/usr/include/openssl/ssl3.h', '/usr/include/openssl/ssl.h',
 #               '/usr/include/openssl/ssl2.h', '/usr/include/openssl/ssl23.h',
@@ -144,7 +159,7 @@ sslProto = open(ff('security/nss/lib/ssl/sslproto.h'), 'r')
 sslProtoD = {}
 
 for line in sslProto:
-    m = re.match('#define\s+(\S+)\s+(\S+)', line)
+    m = re.match(r'#define\s+(\S+)\s+(\S+)', line)
     if m:
         key, value = m.groups()
         sslProtoD[key] = value
@@ -165,7 +180,7 @@ for fl in oSSLinclude:
         continue
     fp = open(fname, 'r')
     for line in fp.readlines():
-        m = re.match('# *define\s+(\S+)\s+(\S+)', line)
+        m = re.match(r'# *define\s+(\S+)\s+(\S+)', line)
         if m:
             value,key = m.groups()
             if key.startswith('0x') and "_CK_" in value:
@@ -187,13 +202,13 @@ print("""\
 for firefox_macro in firefox_ciphers:
 
     try:
-        js_cipher_name = cipher_pref[firefox_macro]
+        cipher_pref_name = cipher_pref[firefox_macro]
     except KeyError:
         # This one has no javascript preference.
         continue
 
     # The cipher needs to be enabled in security-prefs.js
-    if enabled_ciphers.get(js_cipher_name, 'false') != 'true':
+    if not enabled_ciphers.get(cipher_pref_name):
         continue
 
     hexval = sslProtoD[firefox_macro].lower()

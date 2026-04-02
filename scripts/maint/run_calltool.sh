@@ -4,7 +4,7 @@
 
 set -e
 
-if test "x$CALLTOOL_PATH" != "x"; then
+if test "$CALLTOOL_PATH" != ""; then
     PYTHONPATH="${CALLTOOL_PATH}:${PYTHONPATH}"
     export PYTHONPATH
 fi
@@ -26,4 +26,3 @@ the calltool distribution.
 You can find calltool at
     https://gitweb.torproject.org/user/nickm/calltool.git
 EOF
-
