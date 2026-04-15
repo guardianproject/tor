@@ -703,6 +703,18 @@ circuit_close_all_marked(void)
   smartlist_clear(circuits_pending_close);
 }
 
+#ifdef TOR_UNIT_TESTS
+/** Return the number of circuits on the circuits_pending_close list.
+ *  Exposed for testing. */
+STATIC int
+circuit_count_pending_close(void)
+{
+  if (!circuits_pending_close)
+    return 0;
+  return smartlist_len(circuits_pending_close);
+}
+#endif
+
 /** Return a pointer to the global list of circuits. */
 MOCK_IMPL(smartlist_t *,
 circuit_get_global_list,(void))
