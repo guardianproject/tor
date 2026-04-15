@@ -2207,6 +2207,14 @@ circuit_mark_for_close_, (circuit_t *circ, int reason, int line,
     reason = END_CIRC_REASON_NONE;
   }
 
+  /* If a callback above (e.g. pathbias probing failing to send on a full
+   * queue) recursively called circuit_mark_for_close on this circuit, it is
+   * already marked and on circuits_pending_close. Bail out to avoid
+   * performing cleanup twice. */
+  if (circ->marked_for_close) {
+    return;
+  }
+
   circuit_synchronize_written_or_bandwidth(circ, CIRCUIT_N_CHAN);
   circuit_synchronize_written_or_bandwidth(circ, CIRCUIT_P_CHAN);
 
