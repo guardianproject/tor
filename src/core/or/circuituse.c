@@ -333,7 +333,7 @@ circuit_is_better(const origin_circuit_t *oa, const origin_circuit_t *ob,
  * If it's INTRODUCE_ACK_WAIT and must_be_open==0, then return the
  * closest introduce-purposed circuit that you can find.
  */
-static origin_circuit_t *
+STATIC origin_circuit_t *
 circuit_get_best(const entry_connection_t *conn,
                  int must_be_open, uint8_t purpose,
                  int need_uptime, int need_internal)

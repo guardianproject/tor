@@ -47,6 +47,8 @@
 #include "core/mainloop/connection.h"
 #include "core/or/connection_edge.h"
 #include "core/or/edge_connection_st.h"
+#include "core/or/entry_connection_st.h"
+#include "core/or/socks_request_st.h"
 
 #include "test/fakecircs.h"
 #include "test/rng_test_helpers.h"
@@ -338,6 +340,15 @@ channel_get_addr_if_possible_mock(const channel_t *chan, tor_addr_t *addr_out)
 
  done:
   return 0;
+}
+
+static const node_t *
+build_state_get_exit_node_mock(cpath_build_state_t *state)
+{
+  static node_t node;
+  (void)state;
+  memset(&node, 0, sizeof(node));
+  return &node;
 }
 
 static void
@@ -1540,6 +1551,64 @@ test_conflux_begindir_rejects_one_leg_with_end(void *arg)
   test_teardown();
 }
 
+static void
+test_conflux_circuit_get_best_rejects_internal(void *arg)
+{
+  (void)arg;
+  entry_connection_t *entry_conn = NULL;
+  origin_circuit_t *selected = NULL;
+  test_setup();
+
+  launch_new_set(2);
+  tt_int_op(smartlist_len(client_circs), OP_EQ, 2);
+
+  circuit_t *client1 = smartlist_get(client_circs, 0);
+  circuit_t *client2 = smartlist_get(client_circs, 1);
+  simulate_circuit_build(client1);
+  simulate_circuit_build(client2);
+
+  while (smartlist_len(mock_cell_delivery) > 0) {
+    process_mock_cell_delivery();
+  }
+
+  tt_int_op(digest256map_size(get_linked_pool(true)), OP_EQ, 1);
+
+  SMARTLIST_FOREACH_BEGIN(client_circs, circuit_t *, client_circ) {
+    client_circ->n_chan = &dummy_channel;
+    client_circ->state = CIRCUIT_STATE_OPEN;
+  } SMARTLIST_FOREACH_END(client_circ);
+
+  MOCK(build_state_get_exit_node, build_state_get_exit_node_mock);
+
+  entry_conn = entry_connection_new(CONN_TYPE_AP, AF_INET);
+  tt_ptr_op(entry_conn, OP_NE, NULL);
+  tt_ptr_op(entry_conn->socks_request, OP_NE, NULL);
+
+  entry_conn->socks_request->command = SOCKS_COMMAND_CONNECT;
+  strlcpy(entry_conn->socks_request->address, "18.0.0.1",
+          sizeof(entry_conn->socks_request->address));
+  entry_conn->socks_request->port = 443;
+  entry_conn->use_begindir = 1;
+  entry_conn->want_onehop = 0;
+
+  selected = circuit_get_best(entry_conn, 1, CIRCUIT_PURPOSE_C_GENERAL,
+                              0, 0);
+  tt_ptr_op(selected, OP_NE, NULL);
+  tt_int_op(selected->base_.purpose, OP_EQ, CIRCUIT_PURPOSE_CONFLUX_LINKED);
+
+  selected = circuit_get_best(entry_conn, 1, CIRCUIT_PURPOSE_C_GENERAL,
+                              0, 1);
+  tt_ptr_op(selected, OP_EQ, NULL);
+
+ done:
+  UNMOCK(build_state_get_exit_node);
+  if (entry_conn) {
+    connection_free_minimal(ENTRY_TO_CONN(entry_conn));
+  }
+  test_clear_circs();
+  test_teardown();
+}
+
 struct testcase_t conflux_pool_tests[] = {
   { "link", test_conflux_link, TT_FORK, NULL, NULL },
   { "link_retry", test_conflux_link_retry, TT_FORK, NULL, NULL },
@@ -1554,6 +1623,9 @@ struct testcase_t conflux_pool_tests[] = {
     TT_FORK, NULL, NULL },
   { "begindir_rejects_one_leg_with_end",
     test_conflux_begindir_rejects_one_leg_with_end,
+    TT_FORK, NULL, NULL },
+  { "circuit_get_best_rejects_internal",
+    test_conflux_circuit_get_best_rejects_internal,
     TT_FORK, NULL, NULL },
   // XXX: These two currently fail, because they are not finished:
   //{ "link_fail", test_conflux_link_fail, TT_FORK, NULL, NULL },
