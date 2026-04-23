@@ -355,7 +355,7 @@ circuit_get_best(const entry_connection_t *conn,
   // Prefer pre-built conflux circuits here, if available but only for general
   // purposes. We don't have onion service conflux support at the moment.
   if (purpose == CIRCUIT_PURPOSE_C_GENERAL &&
-      (best = conflux_get_circ_for_conn(conn, now_sec))) {
+      (best = conflux_get_circ_for_conn(conn, now_sec, need_internal))) {
     return best;
   }
 
