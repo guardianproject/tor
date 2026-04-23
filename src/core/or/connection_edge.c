@@ -4054,6 +4054,7 @@ connection_exit_begin_conn(cell_t *cell, circuit_t *circ)
     }
   } else if (rh.command == RELAY_COMMAND_BEGIN_DIR) {
     if (!directory_permits_begindir_requests(options) ||
+        CIRCUIT_IS_CONFLUX(circ) || /* Cannot be used for dir streams */
         circ->purpose != CIRCUIT_PURPOSE_OR) {
       relay_send_end_cell_from_edge(rh.stream_id, circ,
                                   END_STREAM_REASON_NOTDIRECTORY, layer_hint);
@@ -4438,6 +4439,13 @@ connection_exit_connect_dir(edge_connection_t *exitconn)
   /* link exitconn to circ, now that we know we can use it. */
   exitconn->next_stream = circ->n_streams;
   circ->n_streams = exitconn;
+  /* Conflux is not supported for directory streams, but if we *do* get here
+   * with a conflux circuit, we need to keep our lists are coherent. This BUG()
+   * condition is actually guarded against in connection_exit_begin_conn(),
+   * but the maze is powerful and contains many roving minotaurs */
+  if (BUG(CIRCUIT_IS_CONFLUX(TO_CIRCUIT(circ)))) {
+    conflux_update_n_streams(circ, exitconn);
+  }
 
   if (connection_add(TO_CONN(dirconn))<0) {
     connection_edge_end(exitconn, END_STREAM_REASON_RESOURCELIMIT);
