@@ -3865,7 +3865,7 @@ begin_cell_parse(const cell_t *cell, begin_cell_t *bcell,
     *end_reason_out = END_STREAM_REASON_TORPROTOCOL;
     return -1;
   }
-  if (body + rh.length >= nul + 4)
+  if (body + rh.length > nul + 4)
     bcell->flags = ntohl(get_uint32(nul+1));
 
   return 0;
