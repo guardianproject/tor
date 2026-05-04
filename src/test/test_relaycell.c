@@ -1043,10 +1043,54 @@ test_relaycell_resolved(void *arg)
   UNMOCK(connection_ap_handshake_socks_resolved);
 }
 
+/* Test that an END cell with no body (rh.length == 0) is rejected as a
+ * protocol violation in both the "not open" and "open stream" case. */
+static void
+test_relaycell_end_no_reason(void *arg)
+{
+  cell_t cell;
+  relay_header_t rh;
+  edge_connection_t *edgeconn;
+  entry_connection_t *entryconn;
+  origin_circuit_t *circ;
+  int ret;
+
+  (void)arg;
+
+  MOCK(connection_mark_unattached_ap_, mock_connection_mark_unattached_ap_);
+  MOCK(connection_mark_for_close_internal_, mock_mark_for_close);
+
+  circ = helper_create_origin_circuit(CIRCUIT_PURPOSE_C_GENERAL, 0);
+  entryconn = fake_entry_conn(circ, 1);
+  edgeconn = ENTRY_TO_EDGE_CONN(entryconn);
+
+  /* AP connection in CONNECT_WAIT: empty END cell must be rejected before any
+   * reason-code processing in connection_edge_process_relay_cell_not_open. */
+  edgeconn->base_.state = AP_CONN_STATE_CONNECT_WAIT;
+  PACK_CELL(edgeconn->stream_id, RELAY_COMMAND_END, "");
+  ret = connection_edge_process_relay_cell(&cell, TO_CIRCUIT(circ), edgeconn,
+                                           circ->cpath);
+  tt_int_op(ret, OP_EQ, -END_CIRC_REASON_TORPROTOCOL);
+
+  /* No matched stream (conn=NULL): empty END cell must be rejected in
+   * handle_relay_cell_command before reading any reason byte. */
+  PACK_CELL(1, RELAY_COMMAND_END, "");
+  ret = connection_edge_process_relay_cell(&cell, TO_CIRCUIT(circ), NULL,
+                                           circ->cpath);
+  tt_int_op(ret, OP_EQ, -END_CIRC_REASON_TORPROTOCOL);
+
+ done:
+  UNMOCK(connection_mark_unattached_ap_);
+  UNMOCK(connection_mark_for_close_internal_);
+  circuit_free_(TO_CIRCUIT(circ));
+  connection_free_minimal(ENTRY_TO_CONN(entryconn));
+}
+
 struct testcase_t relaycell_tests[] = {
   { "resolved", test_relaycell_resolved, TT_FORK, NULL, NULL },
   { "circbw", test_circbw_relay, TT_FORK, NULL, NULL },
   { "halfstream", test_halfstream_insertremove, TT_FORK, NULL, NULL },
   { "streamwrap", test_halfstream_wrap, TT_FORK, NULL, NULL },
+  { "end_no_reason", test_relaycell_end_no_reason, TT_FORK, NULL, NULL },
   END_OF_TESTCASES
 };

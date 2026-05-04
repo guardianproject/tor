@@ -1,0 +1,4 @@
+  o Major bugfixes (cell handling):
+    - Fix out-of-bounds read (OOB) when END, TRUNCATE and TRUNCATED cell have
+      no reason in their payload. TROVE-2026-011. Found by Brian Carpenter
+      (geeknik). Fixes bug 41254; bugfix on 0.1.1.1-alpha.
