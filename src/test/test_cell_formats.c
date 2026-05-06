@@ -231,8 +231,8 @@ test_cfmt_begin_cells(void *arg)
    * out of ound. The fixed condition (>) does not set flags at all. */
   memset(&bcell, 0x7f, sizeof(bcell));
   const char payload[] = "a.b:80\x00\x42\x43\x44";
-  make_relay_cell(&cell, RELAY_COMMAND_BEGIN, payload, sizeof(payload) - 1);
-  tt_int_op(0, OP_EQ, begin_cell_parse(&cell, &bcell, &end_reason));
+  make_relay_msg(&msg, RELAY_COMMAND_BEGIN, payload, sizeof(payload) - 1);
+  tt_int_op(0, OP_EQ, begin_cell_parse(&msg, &bcell, &end_reason));
   tt_int_op(5, OP_EQ, bcell.stream_id);
   tt_str_op("a.b", OP_EQ, bcell.address);
   tt_int_op(80, OP_EQ, bcell.port);
