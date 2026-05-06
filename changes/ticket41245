@@ -1,0 +1,4 @@
+  o Major bugfixes (relay, onion service):
+    - Fix off-by-one out-of-bounds read if a malformed BEGIN cell is received.
+      TROVE-2026-007. Found by Flanagan. Fixes bug 41245; bugfix on
+      0.2.4.7-alpha.
