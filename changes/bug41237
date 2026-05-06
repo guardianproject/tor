@@ -1,4 +1,0 @@
-  o Major bugfixes (pathbias):
-    - Fix a client-side crash caused by double-close of a circuit while under
-      circuit queue memory pressure. TROVE-2026-009. Found by cypherpunks.
-      Fixes bug 41237; bugfix on 0.3.3.6-rc.

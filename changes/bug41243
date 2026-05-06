@@ -1,4 +1,0 @@
-  o Major bugfixes (conflux):
-    - Do not attempt or accept BEGIN_DIR via conflux legs. TROVE-2026-008.
-      Credit to Anas Cherni from Calif.io in collaboration with Claude and
-      Anthropic Research. Fixes bug 41243; bugfix on 0.4.8.1-alpha.
