@@ -198,6 +198,27 @@ conflux_handle_oom(size_t bytes_to_remove)
   return 0;
 }
 
+/** Free all cells in the ooo_q of the given cfx which updates the
+ * total_ooo_q_bytes.
+ *
+ * Must be called before freeing the queue itself. */
+void
+conflux_clear_ooo_q(conflux_t *cfx)
+{
+  tor_assert(cfx);
+  tor_assert(cfx->ooo_q);
+
+  size_t cost = smartlist_len(cfx->ooo_q) * sizeof(cell_t);
+  if (BUG(cost > total_ooo_q_bytes)) {
+    total_ooo_q_bytes = 0;
+  } else {
+    total_ooo_q_bytes -= cost;
+  }
+
+  SMARTLIST_FOREACH(cfx->ooo_q, conflux_cell_t *, cell, tor_free(cell));
+  smartlist_clear(cfx->ooo_q);
+}
+
 /**
  * Returns true if a circuit has package window space to send, and is
  * not blocked locally.

@@ -1326,12 +1326,65 @@ test_conflux_switch(void *arg)
   return;
  }
 
+/* Regression test for #41251: ensure OOO queue bytes accounting is cleared
+ * when a conflux set is torn down with queued out-of-order cells. */
+static void
+test_conflux_ooo_q_teardown_accounting(void *arg)
+{
+  (void) arg;
+  test_setup();
+
+  launch_new_set(2);
+
+  tt_int_op(smartlist_len(client_circs), OP_EQ, 2);
+  circuit_t *client1 = smartlist_get(client_circs, 0);
+  circuit_t *client2 = smartlist_get(client_circs, 1);
+
+  simulate_circuit_build(client1);
+  simulate_circuit_build(client2);
+
+  while (smartlist_len(mock_cell_delivery) > 0) {
+    process_mock_cell_delivery();
+  }
+
+  circuit_t *exit1 = get_exit_circ(client1);
+  tor_assert(exit1);
+  tor_assert(exit1->conflux);
+
+  conflux_t *cfx = exit1->conflux;
+  conflux_leg_t *leg = conflux_get_leg(cfx, exit1);
+  tor_assert(leg);
+
+  /* Force RELAY_DATA cells into the OOO queue by creating a sequence gap. */
+  cfx->last_seq_delivered = 1;
+  leg->last_seq_recv = 5;
+
+  cell_t cell;
+  memset(&cell, 0, sizeof(cell));
+  tt_int_op(conflux_process_cell(cfx, exit1, NULL, &cell), OP_EQ, 0);
+  tt_int_op(conflux_process_cell(cfx, exit1, NULL, &cell), OP_EQ, 0);
+
+  tt_int_op(smartlist_len(cfx->ooo_q), OP_EQ, 2);
+  tt_u64_op(conflux_get_total_bytes_allocation(), OP_EQ,
+            2 * sizeof(cell_t));
+
+  /* test_clear_circs() frees all legs and should free the conflux object.
+   * Accounting must go back to zero even if OOO queue is non-empty. */
+  test_clear_circs();
+  tt_u64_op(conflux_get_total_bytes_allocation(), OP_EQ, 0);
+
+ done:
+  test_teardown();
+}
+
 struct testcase_t conflux_pool_tests[] = {
   { "link", test_conflux_link, TT_FORK, NULL, NULL },
   { "link_retry", test_conflux_link_retry, TT_FORK, NULL, NULL },
   { "link_relink", test_conflux_link_relink, TT_FORK, NULL, NULL },
   { "link_streams", test_conflux_link_streams, TT_FORK, NULL, NULL },
   { "switch", test_conflux_switch, TT_FORK, NULL, NULL },
+  { "ooo_q_teardown_accounting", test_conflux_ooo_q_teardown_accounting,
+    TT_FORK, NULL, NULL },
   // XXX: These two currently fail, because they are not finished:
   //{ "link_fail", test_conflux_link_fail, TT_FORK, NULL, NULL },
   //{ "close", test_conflux_close, TT_FORK, NULL, NULL },
