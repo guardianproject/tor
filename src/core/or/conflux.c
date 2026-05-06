@@ -41,6 +41,15 @@ static inline uint64_t cwnd_sendable(const circuit_t *on_circ,
 static uint64_t total_ooo_q_bytes = 0;
 
 /**
+ * Return the total number of required allocated to store `msg`.
+ */
+size_t
+conflux_msg_alloc_cost(conflux_msg_t *msg)
+{
+  return msg->msg->length + sizeof(conflux_msg_t) + sizeof(relay_msg_t);
+}
+
+/**
  * Determine if we should multiplex a specific relay command or not.
  *
  * TODO: Version of this that is the set of forbidden commands
