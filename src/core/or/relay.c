@@ -435,7 +435,9 @@ circuit_package_relay_cell, (cell_t *cell, circuit_t *circ,
       return 0; /* just drop it */
     }
     or_circuit_t *or_circ = TO_OR_CIRCUIT(circ);
-    relay_encrypt_cell_inbound(cell, or_circ);
+    if (relay_encrypt_cell_inbound(cell, or_circ) < 0) {
+      return -1;
+    }
     chan = or_circ->p_chan;
   }
   ++stats_n_relay_cells_relayed;
