@@ -1,0 +1,4 @@
+  o Major bugfixes (conflux, relay):
+    - Adjust conflux out-of-order queue accounting when clearing a queue.
+      TROVE-2026-010. Found by aptupdate. Fixes bug 41251; bugfix on
+      0.4.8.1-alpha.

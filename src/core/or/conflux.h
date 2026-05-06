@@ -45,6 +45,7 @@ typedef struct {
 size_t conflux_handle_oom(size_t bytes_to_remove);
 uint64_t conflux_get_total_bytes_allocation(void);
 uint64_t conflux_get_circ_bytes_allocation(const circuit_t *circ);
+void conflux_clear_ooo_q(conflux_t *cfx);
 
 void conflux_update_rtt(conflux_t *cfx, circuit_t *circ, uint64_t rtt_usec);
 
@@ -66,6 +67,15 @@ void conflux_note_cell_sent(conflux_t *cfx, circuit_t *circ,
 void conflux_relay_msg_free_(conflux_msg_t *msg);
 #define conflux_relay_msg_free(msg) \
   FREE_AND_NULL(conflux_msg_t, conflux_relay_msg_free_, (msg))
+
+/**
+ * Return the total number of required allocated to store `msg`.
+ */
+inline size_t
+conflux_msg_alloc_cost(conflux_msg_t *msg)
+{
+  return msg->msg->length + sizeof(conflux_msg_t) + sizeof(relay_msg_t);
+}
 
 /* Private section starts. */
 #ifdef TOR_CONFLUX_PRIVATE
