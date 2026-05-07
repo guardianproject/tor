@@ -1,3 +1,11 @@
+Changes in version 0.4.9.8 - 2026-05-07
+  A quick second release because a silent error occurred in our CI build, which
+  resulted in all fallback directories being removed from the list. This means
+  that all new clients will bootstrap against the directory authorities.
+
+  o Minor features (fallbackdir):
+    - Regenerate fallback directories generated on May 07, 2026.
+
 Changes in version 0.4.9.7 - 2026-05-06
   This is a security release fixing several major bugfixes that were reported
   in the past weeks. Huge thanks to everyone that reported these issues! We
