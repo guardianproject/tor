@@ -54,6 +54,7 @@ variables:
            'Acquire::Retries "20";' \
            'APT::Install-Recommends "0";' \
            'APT::Install-Suggests "0";' \
+           'Acquire::Retries "20";' \
            'APT::Get::Assume-Yes "true";' \
            'Dpkg::Use-Pty "0";' \
            "Dir::Cache::Archives \"${APT_CACHE_DIR}\"; " \
