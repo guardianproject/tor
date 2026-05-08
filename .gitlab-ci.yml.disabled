@@ -106,7 +106,7 @@ variables:
     # libubsan1 for building with -fsanitize=address
     - if [ "$HARDENING" = yes ]; then apt-get install libubsan1 libclang-rt-dev; fi
     # TODO: This next line should not be debian-only.
-    - if [ "$STEM" = yes ]; then git clone --depth 1 https://gitlab.torproject.org/tpo/network-health/stem.git ; export STEM_PATH="$(pwd)/stem"; fi
+    - if [ "$STEM" = yes ]; then git clone --depth 1 https://github.com/torproject/stem.git ; export STEM_PATH="$(pwd)/stem"; fi
     # TODO: This next line should not be debian-only.
     - |
       if [ "$CHUTNEY" = yes ]; then

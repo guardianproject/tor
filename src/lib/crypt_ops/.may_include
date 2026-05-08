@@ -26,3 +26,4 @@ keccak-tiny/*.h
 ed25519/*.h
 
 ext/siphash.h
+ext/polyval/*.h

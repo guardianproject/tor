@@ -33,6 +33,7 @@
 #define LOG_PRIVATE
 #include "lib/log/log.h"
 #include "lib/log/log_sys.h"
+#include "lib/log/util_bug.h"
 #include "lib/version/git_revision.h"
 #include "lib/log/ratelim.h"
 #include "lib/lock/compat_mutex.h"
@@ -720,6 +721,8 @@ log_fn_(int severity, log_domain_mask_t domain, const char *fn,
         const char *format, ...)
 {
   va_list ap;
+  if ((domain & LD_BUG) && (severity >= LOG_WARN))
+    tor_bug_increment_count_();
 #ifdef HAVE_WORKING_STDATOMIC
   if (severity > atomic_load(&log_global_min_severity_))
     return;
@@ -737,6 +740,8 @@ log_fn_ratelim_(ratelim_t *ratelim, int severity, log_domain_mask_t domain,
 {
   va_list ap;
   char *m;
+  if ((domain & LD_BUG) && (severity >= LOG_WARN))
+    tor_bug_increment_count_();
 #ifdef HAVE_WORKING_STDATOMIC
   if (severity > atomic_load(&log_global_min_severity_))
     return;
@@ -940,6 +945,7 @@ init_logging(int disable_startup_queue)
 {
   if (!log_mutex_initialized) {
     tor_mutex_init(&log_mutex);
+    tor_bug_init_counter();
     log_mutex_initialized = 1;
   }
 #ifdef HAVE_WORKING_STDATOMIC

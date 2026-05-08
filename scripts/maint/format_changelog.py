@@ -416,7 +416,7 @@ ISSUE_PREFIX_MAP = {
 }
 
 # Let's turn bugs to html.
-BUG_PAT = re.compile('(bug|ticket|issue|feature)\s+([\w/]+#)?(\d{4,6})', re.I)
+BUG_PAT = re.compile(r'(bug|ticket|issue|feature)\s+([\w/]+#)?(\d{4,6})', re.I)
 def bug_html(m):
     kind = m.group(1)
     prefix = m.group(2) or ""

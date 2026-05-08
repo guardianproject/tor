@@ -9,8 +9,10 @@ lib/intmath/*.h
 lib/lock/*.h
 lib/log/*.h
 lib/malloc/*.h
+lib/metrics/*.h
 lib/string/*.h
 lib/subsys/*.h
 lib/testsupport/*.h
+lib/thread/threads.h
 lib/version/*.h
 lib/wallclock/*.h
