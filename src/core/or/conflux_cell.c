@@ -341,16 +341,18 @@ conflux_send_switch_command(circuit_t *send_circ, uint64_t relative_seq)
 
   /* Send the switch command to the new hop */
   if (CIRCUIT_IS_ORIGIN(send_circ)) {
-    relay_send_command_from_edge(0, send_circ,
+    if (relay_send_command_from_edge(0, send_circ,
                                RELAY_COMMAND_CONFLUX_SWITCH,
                                (const char*)cell.payload,
                                RELAY_PAYLOAD_SIZE,
-                               TO_ORIGIN_CIRCUIT(send_circ)->cpath->prev);
+                               TO_ORIGIN_CIRCUIT(send_circ)->cpath->prev) < 0)
+      ret = false;
   } else {
-    relay_send_command_from_edge(0, send_circ,
+    if (relay_send_command_from_edge(0, send_circ,
                                RELAY_COMMAND_CONFLUX_SWITCH,
                                (const char*)cell.payload,
-                               RELAY_PAYLOAD_SIZE, NULL);
+                               RELAY_PAYLOAD_SIZE, NULL) < 0)
+      ret = false;
   }
 
 end:
