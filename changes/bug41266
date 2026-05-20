@@ -1,0 +1,4 @@
+  o Minor bugfixes (relay stability):
+    - Make relays survive having the consensus parameter
+      "onion_queue_wait_cutoff" set to a nonsensical 0 seconds. Fixes
+      bug 41266; bugfix on 0.4.7.11.

@@ -1,0 +1,5 @@
+  o Minor bugfixes (cpuworker threads):
+    - We have a defense-in-depth step to wipe local memory after
+      processing each create cell in a cpuworker thread, but we were
+      accidentally only wiping part of what we wanted to cover. Fixes
+      bug 41269; bugfix on 0.2.4.8-alpha.
