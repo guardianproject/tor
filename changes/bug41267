@@ -1,0 +1,5 @@
+  o Major bugfixes (security, TROVE-2026-019):
+    - Avoid out-of-bounds read/write when parsing a consensus or detached
+      signature with unexpected signature digest type. Impact is
+      minor for most Tor roles, but potentially major for directory
+      authorities. Fixes bug 41267; bugfix on 0.2.8.2-alpha.
