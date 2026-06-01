@@ -1,0 +1,4 @@
+  o Major bugfixes (code safety):
+    - Avoid a dangerous situation in router_find_exact_exit_enclave()
+      where we could have reached an assert if bridges or relays claim
+      an IP address of 0.0.0.0. Fixes bug 41276; bugfix on 0.4.5.1-alpha.

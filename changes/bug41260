@@ -1,0 +1,4 @@
+  o Major bugfixes (memory safety, TROVE-2026-014):
+    - Avoid a heap-use-after-free mistake that can happen in the conflux
+      subsystem, and which can be induced at either the client or the
+      exit relay. Fixes bug 41260; bugfix on 0.4.8.1-alpha.

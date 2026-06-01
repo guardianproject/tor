@@ -1,0 +1,7 @@
+  o Major bugfixes (conflux, security):
+    - Fix a NULL write after free when sending a CONFLUX_SWITCH cell fails. The
+      return value of relay_send_command_from_edge() was ignored, so a send
+      failure (which calls circuit_mark_for_close() and removes the leg via
+      cfx_del_leg()) would go undetected, causing the caller to write to the
+      now-freed current leg and resulting in a crash. TROVE-2026-017. Fixes bug
+      41263; bugfix on 0.4.8.1-alpha.
