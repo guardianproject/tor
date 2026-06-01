@@ -1,5 +1,0 @@
-  o Major bugfixes (compression, security):
-    - Fix a compression bomb bypass where an attacker could concatenate many
-      gzip or zlib sub-streams, each just under the per-stream detection
-      threshold, to avoid the compression bomb check entirely. TROVE-2026-022.
-      Fixes bug 41275; bugfix on 0.3.1.1-alpha.

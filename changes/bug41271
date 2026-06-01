@@ -1,5 +1,0 @@
-  o Minor bugfixes (circuit handshake):
-    - Fix an edge case where relays would allow a CGO-style circuit hop to
-      be established without congestion control parameters, meaning
-      there is no way to refill the sendme windows. Fixes bug 41271;
-      bugfix on 0.4.9.3-alpha.

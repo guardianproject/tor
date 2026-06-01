@@ -1,4 +1,0 @@
-  o Major bugfixes (client stability, TROVE-2026-013, TROVE-2026-015):
-    - Protect against a client-side assert that can happen if a malicious
-      onion service gets the client to load its carefully crafted onion
-      descriptor. Fixes bugs 41259 and 41261; bugfix on 0.3.1.1-alpha.

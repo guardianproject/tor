@@ -1,5 +1,0 @@
-  o Major bugfixes (onion services, TROVE-2026-020):
-    - Avoid a possible divide by zero crash on onion services that have
-      the proof-of-work (PoW) defense enabled. This bug could be hit by
-      extreme bad luck or maybe by the help of an attacker crafting just
-      the right circumstances. Fixes bug 41270; bugfix on 0.4.8.1-alpha.

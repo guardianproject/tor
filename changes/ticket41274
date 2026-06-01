@@ -1,7 +1,0 @@
-  o Major bugfixes (compression, security):
-    - Fix an infinite loop when decompressing a truncated zlib/gzip stream with
-      done=1. A truncated stream never reaches Z_STREAM_END, causing zlib to
-      return Z_BUF_ERROR with no input remaining, which buf_add_compress()
-      mistook for a full output buffer and retried forever. Fixed by returning
-      TOR_COMPRESS_ERROR in that case so the caller can abort cleanly.
-      TROVE-2026-021. Fixes bug 41274; bugfix on 0.2.6.1-alpha.
