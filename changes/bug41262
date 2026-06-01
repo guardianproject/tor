@@ -1,0 +1,6 @@
+  o Major bugfixes (conflux, shutdown):
+    - Fix a use-after-free in the shutdown path when freeing conflux circuits.
+      cfx_add_leg() shares stream list pointers across legs without NULLing the
+      old leg, so circuit_free_all() would free the lists via one leg and then
+      access freed memory via another. TROVE-2026-016. Fixes bug 41262; bugfix
+      on 0.4.8.1-alpha.
