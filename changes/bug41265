@@ -1,0 +1,7 @@
+  o Major bugfixes (DNSPort, TROVE-2026-018):
+    - Fix a client-side crash that would happen if we decide to stop
+      reading on a RESOLVE request that came from the DNSPort or
+      controller. This crash could happen naturally under heavy load
+      and with poor luck, but since 0.4.7.2-alpha it could be induced
+      by the exit relay via a flow control request. Fixes bug 41265;
+      bugfix on 0.2.0.1-alpha.
