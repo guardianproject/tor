@@ -61,17 +61,23 @@ log_unsafe_socks_warning(int socks_protocol, const char *address,
 {
   static ratelim_t socks_ratelim = RATELIM_INIT(SOCKS_WARN_INTERVAL);
 
-  if (safe_socks) {
-    log_fn_ratelim(&socks_ratelim, LOG_WARN, LD_APP,
+  char *m = NULL;
+
+  /* note the subtle "||" here: warn every time if safe_socks is set, and
+   * warn in a rate-limited way otherwise. */
+  if (safe_socks || (m = rate_limit_log(&socks_ratelim, approx_time()))) {
+    log_warn(LD_APP,
              "Your application (using socks%d to port %d) is giving "
              "Tor only an IP address. Applications that do DNS resolves "
              "themselves may leak information. Consider using Socks4A "
              "(e.g. via privoxy or socat) instead. For more information, "
              "please see https://2019.www.torproject.org/docs/faq.html.en"
-             "#WarningsAboutSOCKSandDNSInformationLeaks.%s",
+             "#WarningsAboutSOCKSandDNSInformationLeaks.%s%s",
              socks_protocol,
              (int)port,
-             safe_socks ? " Rejecting." : "");
+             safe_socks ? " Rejecting." : "",
+             m ? m : "");
+    tor_free(m);
   }
   control_event_client_status(LOG_WARN,
                               "DANGEROUS_SOCKS PROTOCOL=SOCKS%d ADDRESS=%s:%d",
