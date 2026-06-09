@@ -1,0 +1,5 @@
+  o Major bugfixes (client):
+    - Resume warning about unsafe socks protocols (socks4 or
+      socks5-not-hostname) when SafeSocks is not set. Also resume
+      warning every time when TestSocks is set. Fixes bug 41290; bugfix
+      on 0.2.2.18-alpha and 0.2.4.11-alpha.
