@@ -1,0 +1,5 @@
+  o Minor bugfixes (client-side onion service):
+    - Stop leaking memory in the case where the client fetches a
+      well-formed onion descriptor but it turns out to not match the
+      onion address we intended to fetch. Fixes bug 41264; bugfix on
+      0.3.2.1-alpha.

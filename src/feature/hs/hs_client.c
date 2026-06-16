@@ -2194,6 +2194,11 @@ hs_client_decode_descriptor(const char *desc_str,
              "doesn't validate with computed blinded key: %s",
              tor_cert_describe_signature_status(cert));
     ret = HS_DESC_DECODE_GENERIC_ERROR;
+
+    /* free it since we won't be using it */
+    hs_descriptor_free(*desc);
+    *desc = NULL;
+
     goto err;
   }
 
