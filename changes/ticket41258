@@ -1,0 +1,7 @@
+  o Major bugfixes (conflux, security, TROVE):
+    - Reject a CONFLUX_LINK cell that arrives on a circuit which already has
+      attached streams. A malicious client could send a RELAY_COMMAND_BEGIN
+      before the CONFLUX_LINK on the same circuit, attaching an exit stream
+      that would later end up orphan leaving a dangling circuit back-pointer
+      and a use-after-free (UAF) when the circuit is freed. TROVE-2026-025.
+      Fixes bug 41258; bugfix on 0.4.8.1-alpha.

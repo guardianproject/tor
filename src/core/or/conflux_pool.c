@@ -1840,6 +1840,16 @@ conflux_process_link(circuit_t *circ, const relay_msg_t *msg)
     goto end;
   }
 
+  /* A LINK must arrive on a fresh circuit that has no attached streams. */
+  if (TO_OR_CIRCUIT(circ)->n_streams ||
+      TO_OR_CIRCUIT(circ)->resolving_streams) {
+    log_fn(LOG_PROTOCOL_WARN, LD_CIRC,
+           "Got a CONFLUX_LINK on a circuit with attached streams. "
+           "Closing circuit.");
+    circuit_mark_for_close(circ, END_CIRC_REASON_TORPROTOCOL);
+    goto end;
+  }
+
   /* On errors, logging is emitted in this parsing function. */
   link = conflux_cell_parse_link(msg);
   if (!link) {
