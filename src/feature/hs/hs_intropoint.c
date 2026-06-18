@@ -599,7 +599,9 @@ validate_introduce1_parsed_cell(const trn_cell_introduce1_t *cell)
    * safety net here. The legacy ID must be zeroes in this case. */
   legacy_key_id_len = trn_cell_introduce1_getlen_legacy_key_id(cell);
   legacy_key_id = trn_cell_introduce1_getconstarray_legacy_key_id(cell);
-  if (BUG(!fast_mem_is_zero((char *) legacy_key_id, legacy_key_id_len))) {
+  if (!fast_mem_is_zero((char *) legacy_key_id, legacy_key_id_len)) {
+    log_fn(LOG_PROTOCOL_WARN, LD_PROTOCOL,
+           "Incoming INTRODUCE1 cell uses legacy format. Rejecting.");
     goto invalid;
   }
 
