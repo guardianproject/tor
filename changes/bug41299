@@ -1,0 +1,5 @@
+  o Minor bugfixes (relay):
+    - Avoid a mistaken BUG() warning and backtrace if a client sends an
+      INTRODUCE1 cell using the legacy format from v2 onion services. This
+      error case was already handled correctly, but there's no need to
+      warn and backtrace. Fixes bug 41299; bugfix on 0.4.6.1-alpha.
