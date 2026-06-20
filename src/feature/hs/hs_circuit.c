@@ -1476,6 +1476,14 @@ hs_circ_send_introduce1(origin_circuit_t *intro_circ,
     goto close;
   }
 
+  if (BUG(fast_mem_is_zero((char *)rend_circ->hs_ident->rendezvous_cookie,
+                           HS_REND_COOKIE_LEN))) {
+    /* make sure we aren't somehow sending an intro cell without
+     * initializing the rendezvous cookie. this is defense-in-depth for
+     * bugs like #41297. */
+    goto close;
+  }
+
   /* Set the PoW solution if any. */
   intro1_data.pow_solution = pow_solution;
 
@@ -1570,6 +1578,10 @@ hs_circ_send_establish_rendezvous(origin_circuit_t *circ)
     memwipe(cell, 0, cell_len);
     goto err;
   }
+
+  /* Record that we sent the cell, so we can make sure our state is as
+   * expected. */
+  circ->hs_ident->sent_establish_rendezvous = 1;
 
   memwipe(cell, 0, cell_len);
   return 0;

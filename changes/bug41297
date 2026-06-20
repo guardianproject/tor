@@ -1,0 +1,5 @@
+  o Major bugfixes (onion services):
+    - Prevent a race condition where in just the right circumstances a
+      rendezvous point could man-in-the-middle (impersonate) the onion
+      service that the client was trying to reach. Fixes bug 41297;
+      bugfix on 0.3.5.3-alpha.
