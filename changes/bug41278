@@ -1,0 +1,4 @@
+  o Minor bugfixes (code security):
+    - Add a defensive check in port_parse_ports_relay() to make it
+      clearer to static analysis tools that there is no security
+      problem. Fixes bug 41278; bugfix on 0.4.3.1-alpha.
