@@ -1,5 +1,0 @@
-  o Minor bugfixes (directory authorities):
-    - Correctly omit "package" lines from the consensus. In proposal
-      301 we tried to make a new consensus method that never generates
-      "package" lines, but we got the logic wrong. Fixes bug 41293;
-      bugfix on 0.4.9.1-alpha.

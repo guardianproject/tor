@@ -1,5 +1,0 @@
-  o Major bugfixes (clients):
-    - Make clients more consistently expire entry guards 48 to 60
-      days after they are first used. Previously, we would sometimes
-      expire entry guards after this intended range, but sometimes we
-      would wait up to 120 days. Fixes bug 41280; bugfix on 0.3.0.1-alpha.
