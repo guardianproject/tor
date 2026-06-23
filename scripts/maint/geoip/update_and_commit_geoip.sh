@@ -17,6 +17,7 @@ fi
 TOPDIR=$(pwd)
 cd "./src/config/"
 "${CMDDIR}/update_geoip.sh"
+"${CMDDIR}/patch_geoip.sh"
 cd "${TOPDIR}"
 
 DASH_DATE=$(date -u +"%Y-%m-%d")
