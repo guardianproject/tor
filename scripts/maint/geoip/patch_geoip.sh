@@ -2,7 +2,6 @@
 
 set -e
 
-CMDDIR=$(cd "$(dirname "$0")" && pwd)
 CFGDIR=$(pwd)
 RULES="${CFGDIR}/geoip-overrides.sed"
 
