@@ -1,4 +1,0 @@
-  o Major bugfixes (client):
-    - Clients no longer assert and exit if an onion service encodes an
-      all-zero public key for one of its introduction points. Fixes bug
-      41295; bugfix on 0.3.2.1-alpha.

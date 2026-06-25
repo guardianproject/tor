@@ -1,8 +1,0 @@
-  o Major bugfixes (directory authorities):
-    - Stop allowing 0 as a port in exit policy lines. We had put in some
-      secondary checks to make sure exit policy ports weren't out of
-      the expected range, but one of those checks accidentally allowed
-      us to parse the port "0" as equivalent to the port range "1-0",
-      which triggered an assert when generating a networkstatus vote
-      (on v3 directory authorities) or a networkstatus document (on the
-      bridge authority). Fixes bug 41292; bugfix on 0.1.2.5-alpha.

@@ -1,5 +1,0 @@
-  o Major bugfixes (security, conflux, TROVE):
-    - Fix a use-after-free (and potential double free) of a conflux object when
-      a recovery leg revives a conflux set whose last linked leg has already
-      been closed. A malicious exit could use this to crash a client.
-      TROVE-2026-026. Fixes bug 41306; bugfix on 0.4.8.1-alpha.
