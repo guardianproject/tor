@@ -1498,7 +1498,9 @@ hs_circ_send_introduce1(origin_circuit_t *intro_circ,
   /* From the introduce1 data object, this will encode the INTRODUCE1 cell
    * into payload which is then ready to be sent as is. */
   payload_len = hs_cell_build_introduce1(&intro1_data, payload);
-  if (BUG(payload_len < 0)) {
+  if (payload_len < 0) {
+    log_fn(LOG_PROTOCOL_WARN, LD_REND,
+           "Problem building introduce1 cell. Closing circuit.");
     goto close;
   }
 
