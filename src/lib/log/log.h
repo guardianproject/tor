@@ -19,6 +19,9 @@
 #include "lib/defs/logging_types.h"
 #include "lib/testsupport/testsupport.h"
 
+/* For atomic operations on log_global_min_severity_ */
+#include "lib/thread/threads.h"
+
 #ifdef HAVE_SYSLOG_H
 #include <syslog.h>
 #define LOG_WARN LOG_WARNING
@@ -203,7 +206,12 @@ void tor_log_update_sigsafe_err_fds(void);
 struct smartlist_t;
 void tor_log_get_logfile_names(struct smartlist_t *out);
 
+/* Lowest log level anybody cares about. Uses atomics for thread-safety. */
+#ifdef HAVE_WORKING_STDATOMIC
+extern atomic_int log_global_min_severity_;
+#else
 extern int log_global_min_severity_;
+#endif
 
 #ifdef TOR_COVERAGE
 /* For coverage builds, we try to avoid our log_debug optimization, since it
@@ -216,7 +224,11 @@ static inline bool debug_logging_enabled(void);
  */
 static inline bool debug_logging_enabled(void)
 {
+#ifdef HAVE_WORKING_STDATOMIC
+  return PREDICT_UNLIKELY(atomic_load(&log_global_min_severity_) == LOG_DEBUG);
+#else
   return PREDICT_UNLIKELY(log_global_min_severity_ == LOG_DEBUG);
+#endif
 }
 #endif /* defined(TOR_COVERAGE) */
 

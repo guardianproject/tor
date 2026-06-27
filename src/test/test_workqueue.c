@@ -426,10 +426,13 @@ main(int argc, char **argv)
   handled_len = opt_n_items;
 #endif /* defined(TRACK_RESPONSES) */
 
+  int test_result = 0;
+
   for (i = 0; i < opt_n_inflight; ++i) {
     if (! add_work(tp)) {
       puts("Couldn't add work.");
-      return 1;
+      test_result = 1;
+      goto cleanup;
     }
   }
 
@@ -444,12 +447,27 @@ main(int argc, char **argv)
     printf("%d vs %d\n", n_sent, opt_n_items);
     printf("%d+%d vs %d\n", n_received, n_successful_cancel, n_sent);
     puts("FAIL");
-    return 1;
+    test_result = 1;
   } else if (no_shutdown) {
     puts("Accepted work after shutdown\n");
     puts("FAIL");
+    test_result = 1;
   } else {
     puts("OK");
-    return 0;
+    test_result = 0;
   }
+
+cleanup:
+  /* Clean up threadpool before exit to avoid OpenSSL cleanup races. */
+  if (tp) {
+    threadpool_free(tp);
+  }
+
+#ifdef TRACK_RESPONSES
+  bitarray_free(handled);
+  bitarray_free(received);
+  tor_mutex_uninit(&bitmap_mutex);
+#endif
+
+  return test_result;
 }
