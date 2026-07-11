@@ -65,7 +65,7 @@ log_unsafe_socks_warning(int socks_protocol, const char *address,
   /* note the subtle "||" here: either warn every time, or else
    * warn in a rate-limited way otherwise. */
   if (warn_every_time || (m = rate_limit_log(&socks_ratelim, approx_time()))) {
-    log_warn(LD_APP,
+    log_debug(LD_APP,
              "Your application (using socks%d to port %d) is giving "
              "Tor only an IP address. Applications that do DNS resolves "
              "themselves may leak information. Consider using Socks4A "
@@ -78,7 +78,7 @@ log_unsafe_socks_warning(int socks_protocol, const char *address,
              m ? m : "");
     tor_free(m);
   }
-  control_event_client_status(LOG_WARN,
+  control_event_client_status(LOG_DEBUG,
                               "DANGEROUS_SOCKS PROTOCOL=SOCKS%d ADDRESS=%s:%d",
                               socks_protocol, address, (int)port);
 }
